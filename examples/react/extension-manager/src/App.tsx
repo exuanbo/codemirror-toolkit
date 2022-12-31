@@ -11,8 +11,8 @@ const readOnlyThemeExtension = EditorView.theme({
   },
 })
 
-const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>(lastState => ({
-  doc: lastState?.doc ?? 'Hello World!',
+const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>(prevState => ({
+  doc: prevState?.doc ?? 'Hello World!',
   extensions: [
     EditorView.theme({
       '&.cm-editor': {

@@ -5,8 +5,8 @@ import { addViewUpdateListener, viewUpdateListeners } from '@codemirror-toolkit/
 import { createCodeMirror } from '@codemirror-toolkit/react'
 import { useState } from 'react'
 
-const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>(lastState => ({
-  doc: lastState?.doc ?? 'Hello World!',
+const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>(prevState => ({
+  doc: prevState?.doc ?? 'Hello World!',
   extensions: [
     EditorView.theme({
       '&.cm-editor': {

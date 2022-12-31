@@ -33,10 +33,10 @@ function App() {
   ]
   return (
     <CodeMirrorProvider
-      config={lastState => {
+      config={prevState => {
         const extensions = extensionsRef.current
         return {
-          doc: lastState?.doc ?? 'Hello World!',
+          doc: prevState?.doc ?? 'Hello World!',
           extensions: [defaultThemeExtension, extensions],
         }
       }}>
