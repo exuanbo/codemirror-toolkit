@@ -7,7 +7,7 @@ export interface SetContainer<T extends {}> {
   extract: () => Set<T>
 }
 
-export const SetContainerUtils = {
+export const SetContainerUtils = /*#__PURE__*/ Object.freeze({
   add: <T extends {}>(container: SetContainer<T>, value: T): SetContainer<T> => {
     const set = container.extract()
     if (set.has(value)) {
@@ -32,7 +32,7 @@ export const SetContainerUtils = {
     set.clear()
     return createSetContainer(set)
   },
-  fp: {
+  fp: /*#__PURE__*/ Object.freeze({
     add:
       <T extends {}>(value: T) =>
       (container: SetContainer<T>): SetContainer<T> => {
@@ -43,8 +43,8 @@ export const SetContainerUtils = {
       (container: SetContainer<T>): SetContainer<T> => {
         return SetContainerUtils.delete(container, value)
       },
-  },
-}
+  }),
+})
 
 export function createSetContainer<T extends {}>(set: Set<T> = new Set()): SetContainer<T> {
   const container: SetContainer<T> = {
@@ -55,5 +55,6 @@ export function createSetContainer<T extends {}>(set: Set<T> = new Set()): SetCo
     clear: () => SetContainerUtils.clear(container),
     extract: () => set,
   }
+  Object.freeze(container)
   return container
 }
