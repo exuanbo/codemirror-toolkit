@@ -12,6 +12,7 @@ export function createViteConfig(config) {
     ...config,
     build: {
       target: 'es2018',
+      sourcemap: true,
       minify: false,
       emptyOutDir: false,
       ...config?.build,
