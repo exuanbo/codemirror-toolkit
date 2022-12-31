@@ -3,32 +3,32 @@ import type { EffectCallback, MutableRefObject, RefObject } from 'react'
 import { useSingleton } from './useSingleton.js'
 import { useSyncedRef } from './useSyncedRef.js'
 
-interface RefEffectApi<T> {
+interface SyncEffectApi<T> {
   isInvoking: () => boolean
   invokeWith: (value: T) => void
 }
 
-type RefEffectCleanup = ReturnType<EffectCallback>
-type RefEffectCallback<T> = (value: T) => RefEffectCleanup
+type SyncEffectCleanup = ReturnType<EffectCallback>
+type SyncEffectCallback<T> = (value: T) => SyncEffectCleanup
 
-export function useRefWithEffect<T>(
+export function useRefWithSyncEffect<T>(
   initialValue: T,
-  effect: RefEffectCallback<T>,
+  effect: SyncEffectCallback<T>,
 ): MutableRefObject<T>
 
-export function useRefWithEffect<T>(
+export function useRefWithSyncEffect<T>(
   initialValue: T | null,
-  effect: RefEffectCallback<T | null>,
+  effect: SyncEffectCallback<T | null>,
 ): RefObject<T>
 
-export function useRefWithEffect<T>(
+export function useRefWithSyncEffect<T>(
   initialValue: T | null,
-  effect: RefEffectCallback<T | null>,
+  effect: SyncEffectCallback<T | null>,
 ): MutableRefObject<T | null> {
   const effectRef = useSyncedRef(effect)
-  const effectApi = useSingleton<RefEffectApi<T | null>>(() => {
+  const effectApi = useSingleton<SyncEffectApi<T | null>>(() => {
     let isInvoking = false
-    let cleanup: RefEffectCleanup
+    let cleanup: SyncEffectCleanup
     return {
       isInvoking: () => isInvoking,
       invokeWith: value => {

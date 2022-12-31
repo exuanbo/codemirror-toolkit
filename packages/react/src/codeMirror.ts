@@ -12,7 +12,7 @@ import type {
   UseViewHook,
 } from './types.js'
 import { isFunction } from './utils/isFunction.js'
-import { useRefWithEffect } from './utils/useRefWithEffect.js'
+import { useRefWithSyncEffect } from './utils/useRefWithSyncEffect.js'
 
 export function createCodeMirror<ContainerElement extends Element = Element>(
   config?: ProvidedCodeMirrorConfig,
@@ -64,7 +64,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   const createConfig = isFunction(config) ? config : () => config
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () =>
-    useRefWithEffect<ContainerElement | null>(null, container => {
+    useRefWithSyncEffect<ContainerElement | null>(null, container => {
       if (!container || typeof window === 'undefined') {
         return
       }
