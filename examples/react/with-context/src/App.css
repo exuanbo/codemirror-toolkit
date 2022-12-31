@@ -1,0 +1,15 @@
+button {
+  margin-top: 0.5rem;
+}
+
+label {
+  font-family: sans-serif;
+}
+
+input {
+  margin: 0.25rem;
+}
+
+#cm-container {
+  margin-top: 1.375rem;
+}

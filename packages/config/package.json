@@ -1,0 +1,8 @@
+{
+  "name": "@codemirror-toolkit/config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./*"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // Modules
+    "rootDir": "./src",
+    // Emit
+    "outDir": "./dist",
+    // Language and Environment
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  },
+  "include": ["./src"],
+  "references": [{ "path": "../utils" }]
+}

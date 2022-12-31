@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // Modules
+    "rootDir": "./src",
+    // Emit
+    "outDir": "./dist",
+    // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  },
+  "include": ["./src"],
+  "references": []
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "@codemirror-toolkit/config/tsconfig.json",
+  "compilerOptions": {
+    // Modules
+    "paths": {
+      "@codemirror-toolkit/react": ["./packages/react/src"],
+      "@codemirror-toolkit/utils": ["./packages/utils/src"],
+      "@codemirror-toolkit/extensions": ["./packages/extensions/src"]
+    }
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/react" },
+    { "path": "./packages/utils" },
+    { "path": "./packages/extensions" }
+  ]
+}

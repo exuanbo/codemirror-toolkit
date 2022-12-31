@@ -1,0 +1,4 @@
+*.tgz
+*.tsbuildinfo
+tsconfig.*json
+vite.config.ts
