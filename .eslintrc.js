@@ -24,6 +24,16 @@ const config = {
           },
         ],
         '@typescript-eslint/no-unused-vars': 'off',
+        'react/jsx-sort-props': [
+          'error',
+          {
+            callbacksLast: true,
+            shorthandFirst: true,
+            multiline: 'last',
+            reservedFirst: true,
+          },
+        ],
+        'react/prop-types': 'off',
       },
     },
   ],

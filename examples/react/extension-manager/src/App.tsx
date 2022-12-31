@@ -40,7 +40,7 @@ function Editor() {
   return (
     <>
       <button onClick={toggleReadOnly}>Turn {readOnly ? 'off' : 'on'} read-only</button>
-      <div style={{ marginTop: '0.5rem' }} ref={containerRef} />
+      <div ref={containerRef} style={{ marginTop: '0.5rem' }} />
     </>
   )
 }

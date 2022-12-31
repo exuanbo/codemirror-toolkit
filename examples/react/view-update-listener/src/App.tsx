@@ -30,7 +30,7 @@ function Editor() {
   const containerRef = useContainerRef()
   return (
     <>
-      <div id="cm-container" ref={containerRef} />
+      <div ref={containerRef} id="cm-container" />
       {letterCount != null && <div id="letter-count">Letter Count: {letterCount}</div>}
     </>
   )

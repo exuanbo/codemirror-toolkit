@@ -18,7 +18,7 @@ const { Provider: CodeMirrorProvider, useContainerRef } = createCodeMirrorContex
 
 function Editor() {
   const containerRef = useContainerRef()
-  return <div id="cm-container" ref={containerRef} />
+  return <div ref={containerRef} id="cm-container" />
 }
 
 function App() {
@@ -55,12 +55,12 @@ function App() {
       ) : (
         <>
           <label>
-            <input type="checkbox" checked={isReadOnly} onChange={handleReadOnlyChange} />
+            <input checked={isReadOnly} type="checkbox" onChange={handleReadOnlyChange} />
             Read only
           </label>
           <br />
           <label>
-            <input type="checkbox" checked={isEditable} onChange={handleEditableChange} />
+            <input checked={isEditable} type="checkbox" onChange={handleEditableChange} />
             Editable
           </label>
           <br />
