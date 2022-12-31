@@ -43,7 +43,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     const view = useSyncExternalStore(
       subscribeViewUpdate,
       getView,
-      // `EditorView` will never be created on the server
+      // EditorView will never be created on the server
       () => undefined,
     )
     useDebugValue(view)
@@ -68,15 +68,22 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
       if (!container || typeof window === 'undefined') {
         return
       }
-      const view = new EditorView({
-        ...createConfig(prevState),
-        parent: container,
+      const handle = window.requestAnimationFrame(() => {
+        const view = new EditorView({
+          ...createConfig(prevState),
+          parent: container,
+        })
+        setView(view)
       })
-      setView(view)
       return () => {
-        prevState = view.state
-        view.destroy()
-        setView(undefined)
+        const view = getView()
+        if (view) {
+          prevState = view.state
+          view.destroy()
+          setView(undefined)
+        } else {
+          window.cancelAnimationFrame(handle)
+        }
       }
     })
 
