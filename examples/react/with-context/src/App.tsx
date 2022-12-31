@@ -3,7 +3,7 @@ import './App.css'
 import { EditorState, Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { createCodeMirrorContext } from '@codemirror-toolkit/react'
-import { useRef, useState } from 'react'
+import { useInsertionEffect, useRef, useState } from 'react'
 
 const defaultThemeExtension = EditorView.theme({
   '&.cm-editor': {
@@ -27,10 +27,12 @@ function App() {
   const [readOnly, setReadOnly] = useState(false)
   const [editable, setEditable] = useState(true)
   const extensionsRef = useRef(NULLExtension)
-  extensionsRef.current = [
-    readOnly ? readOnlyExtension : NULLExtension,
-    editable ? NULLExtension : nonEditableExtension,
-  ]
+  useInsertionEffect(() => {
+    extensionsRef.current = [
+      readOnly ? readOnlyExtension : NULLExtension,
+      editable ? NULLExtension : nonEditableExtension,
+    ]
+  }, [readOnly, editable])
   return (
     <CodeMirrorProvider
       config={prevState => {
