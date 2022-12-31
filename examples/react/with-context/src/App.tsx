@@ -3,7 +3,7 @@ import './App.css'
 import { EditorState, Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { createCodeMirrorContext } from '@codemirror-toolkit/react'
-import { useInsertionEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 const defaultThemeExtension = EditorView.theme({
   '&.cm-editor': {
@@ -11,7 +11,6 @@ const defaultThemeExtension = EditorView.theme({
   },
 })
 
-const NULLExtension: Extension = []
 const readOnlyExtension = EditorState.readOnly.of(true)
 const nonEditableExtension = EditorView.editable.of(false)
 
@@ -23,26 +22,32 @@ function Editor() {
 }
 
 function App() {
-  const [showEditor, setShowEditor] = useState(false)
-  const [readOnly, setReadOnly] = useState(false)
-  const [editable, setEditable] = useState(true)
-  const extensionsRef = useRef(NULLExtension)
-  useInsertionEffect(() => {
-    extensionsRef.current = [
-      readOnly ? readOnlyExtension : NULLExtension,
-      editable ? NULLExtension : nonEditableExtension,
-    ]
-  }, [readOnly, editable])
+  const [shouldShowEditor, setShowEditor] = useState(false)
+  const [isReadOnly, setReadOnly] = useState(false)
+  const [isEditable, setEditable] = useState(true)
+  const extensionSetRef = useRef(new Set<Extension>())
+  const handleReadOnlyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked
+    setReadOnly(isChecked)
+    const extensionSet = extensionSetRef.current
+    extensionSet[isChecked ? 'add' : 'delete'](readOnlyExtension)
+  }
+  const handleEditableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked
+    setEditable(isChecked)
+    const extensionSet = extensionSetRef.current
+    extensionSet[isChecked ? 'delete' : 'add'](nonEditableExtension)
+  }
   return (
     <CodeMirrorProvider
       config={prevState => {
-        const extensions = extensionsRef.current
+        const extensionSet = extensionSetRef.current
         return {
           doc: prevState?.doc ?? 'Hello World!',
-          extensions: [defaultThemeExtension, extensions],
+          extensions: [defaultThemeExtension, ...extensionSet],
         }
       }}>
-      {showEditor ? (
+      {shouldShowEditor ? (
         <>
           <Editor />
           <button onClick={() => setShowEditor(false)}>Destroy Editor</button>
@@ -50,20 +55,12 @@ function App() {
       ) : (
         <>
           <label>
-            <input
-              type="checkbox"
-              checked={readOnly}
-              onChange={event => setReadOnly(event.target.checked)}
-            />
+            <input type="checkbox" checked={isReadOnly} onChange={handleReadOnlyChange} />
             Read only
           </label>
           <br />
           <label>
-            <input
-              type="checkbox"
-              checked={editable}
-              onChange={event => setEditable(event.target.checked)}
-            />
+            <input type="checkbox" checked={isEditable} onChange={handleEditableChange} />
             Editable
           </label>
           <br />
