@@ -24,22 +24,22 @@ const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElem
 }))
 
 function Editor() {
-  const [readOnly, setReadOnly] = useState(false)
+  const [isReadOnly, setReadOnly] = useState(false)
   useViewEffect(view => {
     setReadOnly(view.state.readOnly)
   }, [])
   const toggleReadOnly = () => {
     const view = getView()
     if (view) {
-      const addOrRemove = readOnly ? removeExtension : addExtension
+      const addOrRemove = isReadOnly ? removeExtension : addExtension
       addOrRemove(view, [readOnlyExtension, readOnlyThemeExtension], { flattenDepth: 1 })
-      setReadOnly(!readOnly)
+      setReadOnly(!isReadOnly)
     }
   }
   const containerRef = useContainerRef()
   return (
     <>
-      <button onClick={toggleReadOnly}>Turn {readOnly ? 'off' : 'on'} read-only</button>
+      <button onClick={toggleReadOnly}>Turn {isReadOnly ? 'off' : 'on'} read-only</button>
       <div ref={containerRef} style={{ marginTop: '0.5rem' }} />
     </>
   )

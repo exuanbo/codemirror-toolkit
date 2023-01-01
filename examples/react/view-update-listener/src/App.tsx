@@ -37,13 +37,13 @@ function Editor() {
 }
 
 function App() {
-  const [showEditor, setShowEditor] = useState(true)
+  const [shouldShowEditor, setShowEditor] = useState(true)
   return (
     <>
-      <button onClick={() => setShowEditor(!showEditor)}>
-        {showEditor ? 'Destroy' : 'Create'} Editor
+      <button onClick={() => setShowEditor(!shouldShowEditor)}>
+        {shouldShowEditor ? 'Destroy' : 'Create'} Editor
       </button>
-      {showEditor && <Editor />}
+      {shouldShowEditor && <Editor />}
     </>
   )
 }
