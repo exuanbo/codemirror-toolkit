@@ -5,19 +5,25 @@ import { useSyncExternalStore } from 'use-sync-external-store/shim'
 
 import type {
   CodeMirror,
+  ContainerRef,
   GetView,
   ProvidedCodeMirrorConfig,
   UseContainerRefHook,
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
+import { createFrameScheduler } from './utils/frameScheduler.js'
 import { isFunction } from './utils/isFunction.js'
-import { useRefWithSyncEffect } from './utils/useRefWithSyncEffect.js'
+import { useSingleton } from './utils/useSingleton.js'
 
 export function createCodeMirror<ContainerElement extends Element = Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement> {
+  const createConfig = isFunction(config) ? config : () => config
+
+  let prevState: EditorState | undefined
   let currentView: EditorView | undefined
+
   type ViewUpdateCallback = () => void
   const viewUpdateCallbacks = new Set<ViewUpdateCallback>()
 
@@ -33,6 +39,13 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   }
 
   function setView(view: EditorView | undefined) {
+    if (view === currentView) {
+      return
+    }
+    if (currentView) {
+      prevState = currentView.state
+      currentView.destroy()
+    }
     currentView = view
     publishViewUpdate()
   }
@@ -60,32 +73,38 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }, [view, ...deps])
   }
 
-  let prevState: EditorState | undefined
-  const createConfig = isFunction(config) ? config : () => config
-
-  const useContainerRef: UseContainerRefHook<ContainerElement> = () =>
-    useRefWithSyncEffect<ContainerElement | null>(null, container => {
-      if (!container) {
-        return
-      }
-      const handle = window.requestAnimationFrame(() => {
-        const view = new EditorView({
-          ...createConfig(prevState),
-          parent: container,
-        })
-        setView(view)
-      })
-      return () => {
-        const view = getView()
-        if (view) {
-          prevState = view.state
-          view.destroy()
-          setView(undefined)
-        } else {
-          window.cancelAnimationFrame(handle)
+  const createContainerRef = (): ContainerRef<ContainerElement> => {
+    let currentContainer: ContainerElement | null = null
+    const frameScheduler = createFrameScheduler()
+    return {
+      get current() {
+        return currentContainer
+      },
+      set current(container) {
+        if (container === currentContainer) {
+          return
         }
-      }
-    })
+        currentContainer = container
+        frameScheduler.cancel()
+        frameScheduler.request(() => {
+          setView(undefined)
+          if (container) {
+            const view = new EditorView({
+              ...createConfig(prevState),
+              parent: container,
+            })
+            setView(view)
+          }
+        })
+      },
+    }
+  }
+
+  let containerRef: ContainerRef<ContainerElement> | undefined
+
+  const getContainerRef = () => containerRef ?? (containerRef = createContainerRef())
+
+  const useContainerRef: UseContainerRefHook<ContainerElement> = () => useSingleton(getContainerRef)
 
   return {
     getView,
