@@ -65,7 +65,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () =>
     useRefWithSyncEffect<ContainerElement | null>(null, container => {
-      if (!container || typeof window === 'undefined') {
+      if (!container) {
         return
       }
       const handle = window.requestAnimationFrame(() => {
