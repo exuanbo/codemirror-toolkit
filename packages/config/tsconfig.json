@@ -4,6 +4,7 @@
 
     // Type Checking
     "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "strict": true,
 
