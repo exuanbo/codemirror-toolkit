@@ -61,6 +61,7 @@ export function createCodeMirrorContext<
 
   const useViewEffect: UseViewEffectHook = (effect, deps) => {
     const { useViewEffect } = useCodeMirror()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return useViewEffect(effect, deps)
   }
 
