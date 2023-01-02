@@ -6,7 +6,7 @@
     // Emit
     "outDir": "./dist",
     // Language and Environment
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
   "include": ["./src"],
   "references": [{ "path": "../utils" }]

@@ -7,7 +7,7 @@
     "outDir": "./dist",
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
   "include": ["./src"],
   "references": []
