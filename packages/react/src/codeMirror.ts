@@ -20,9 +20,12 @@ import { useSingleton } from './utils/useSingleton.js'
 export function createCodeMirror<ContainerElement extends Element = Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement> {
-  const createConfig = isFunction(config) ? config : () => config
-
   let prevState: EditorState | undefined
+
+  function createConfig() {
+    return (isFunction(config) ? config : () => config)(prevState)
+  }
+
   let currentView: EditorView | undefined
 
   type ViewUpdateCallback = () => void
@@ -80,7 +83,9 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
       view?.dispatch(...args)
     }, [])
 
-  const createContainerRef = (): ContainerRef<ContainerElement> => {
+  let containerRef: ContainerRef<ContainerElement> | undefined
+
+  function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null
     const callbackScheduler = createCallbackScheduler()
     return {
@@ -97,7 +102,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
           setView(undefined)
           if (container) {
             const view = new EditorView({
-              ...createConfig(prevState),
+              ...createConfig(),
               parent: container,
             })
             setView(view)
@@ -107,8 +112,9 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }
   }
 
-  let containerRef: ContainerRef<ContainerElement> | undefined
-  const getContainerRef = () => containerRef ?? (containerRef = createContainerRef())
+  function getContainerRef() {
+    return containerRef ?? (containerRef = createContainerRef())
+  }
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => useSingleton(getContainerRef)
 
