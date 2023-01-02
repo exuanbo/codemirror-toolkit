@@ -74,15 +74,11 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }, [view, ...deps])
   }
 
-  const useViewDispatch: UseViewDispatchHook = () => {
-    const view = useView()
-    return useCallback(
-      (...args) => {
-        view?.dispatch(...args)
-      },
-      [view],
-    )
-  }
+  const useViewDispatch: UseViewDispatchHook = () =>
+    useCallback((...args) => {
+      const view = getView()
+      view?.dispatch(...args)
+    }, [])
 
   const createContainerRef = (): ContainerRef<ContainerElement> => {
     let currentContainer: ContainerElement | null = null
