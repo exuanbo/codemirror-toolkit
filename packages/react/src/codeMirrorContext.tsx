@@ -55,19 +55,18 @@ export function createCodeMirrorContext<
   }
 
   const useView: UseViewHook = () => {
-    const { useView } = useCodeMirror()
-    return useView()
+    const codeMirror = useCodeMirror()
+    return codeMirror.useView()
   }
 
   const useViewEffect: UseViewEffectHook = (effect, deps) => {
-    const { useViewEffect } = useCodeMirror()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    return useViewEffect(effect, deps)
+    const codeMirror = useCodeMirror()
+    return codeMirror.useViewEffect(effect, deps)
   }
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
-    const { useContainerRef } = useCodeMirror()
-    return useContainerRef()
+    const codeMirror = useCodeMirror()
+    return codeMirror.useContainerRef()
   }
 
   return {
