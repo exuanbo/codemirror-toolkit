@@ -12,7 +12,7 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
-import { createFrameScheduler } from './utils/frameScheduler.js'
+import { createCallbackScheduler } from './utils/callbackScheduler.js'
 import { isFunction } from './utils/isFunction.js'
 import { useSingleton } from './utils/useSingleton.js'
 
@@ -75,7 +75,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
 
   const createContainerRef = (): ContainerRef<ContainerElement> => {
     let currentContainer: ContainerElement | null = null
-    const frameScheduler = createFrameScheduler()
+    const callbackScheduler = createCallbackScheduler()
     return {
       get current() {
         return currentContainer
@@ -85,8 +85,8 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
           return
         }
         currentContainer = container
-        frameScheduler.cancel()
-        frameScheduler.request(() => {
+        callbackScheduler.cancel()
+        callbackScheduler.request(() => {
           setView(undefined)
           if (container) {
             const view = new EditorView({
@@ -101,7 +101,6 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   }
 
   let containerRef: ContainerRef<ContainerElement> | undefined
-
   const getContainerRef = () => containerRef ?? (containerRef = createContainerRef())
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => useSingleton(getContainerRef)
