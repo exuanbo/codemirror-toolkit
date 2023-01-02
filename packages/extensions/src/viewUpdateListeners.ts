@@ -9,7 +9,8 @@ export type ViewUpdateListener = (update: ViewUpdate) => void
 
 export interface ViewUpdateListenerAction {
   add?: ViewUpdateListener[]
-  remove?: ViewUpdateListener[] | 'all'
+  remove?: ViewUpdateListener[]
+  clear?: boolean
 }
 
 export const ViewUpdateListenerEffect = /*#__PURE__*/ StateEffect.define<ViewUpdateListenerAction>()
@@ -26,11 +27,16 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
         effect.is(ViewUpdateListenerEffect)
           ? mapStateEffectValue(
               effect,
-              ({ remove: listenersToRemove = [], add: listenersToAdd = [] }) =>
-                (listenersToRemove === 'all'
+              ({
+                add: listenersToAdd = [],
+                remove: listenersToRemove = [],
+                clear: shouldClearListeners = false,
+              }) => {
+                const clearedListeners = shouldClearListeners
                   ? resultListeners.clear()
-                  : resultListeners.deleteMany(listenersToRemove)
-                ).addMany(listenersToAdd),
+                  : resultListeners
+                return clearedListeners.deleteMany(listenersToRemove).addMany(listenersToAdd)
+              },
             )
           : resultListeners,
       listeners,
@@ -50,7 +56,7 @@ export function viewUpdateListeners(...initialListeners: ViewUpdateListener[]): 
   )
 }
 
-function ensureViewUpdateListenersField(view: EditorView): void {
+function assertViewUpdateListenersField(view: EditorView): void {
   if (!view.state.field(viewUpdateListenersField, /* require: */ false)) {
     throw new Error('viewUpdateListeners extension is not enabled')
   }
@@ -59,7 +65,7 @@ function ensureViewUpdateListenersField(view: EditorView): void {
 export type Unsubscribe = () => void
 
 export function addViewUpdateListener(view: EditorView, listener: ViewUpdateListener): Unsubscribe {
-  ensureViewUpdateListenersField(view)
+  assertViewUpdateListenersField(view)
   view.dispatch({
     effects: ViewUpdateListenerEffect.of({ add: [listener] }),
   })
@@ -69,15 +75,15 @@ export function addViewUpdateListener(view: EditorView, listener: ViewUpdateList
 }
 
 export function removeViewUpdateListener(view: EditorView, listener: ViewUpdateListener): void {
-  ensureViewUpdateListenersField(view)
+  assertViewUpdateListenersField(view)
   view.dispatch({
     effects: ViewUpdateListenerEffect.of({ remove: [listener] }),
   })
 }
 
 export function clearViewUpdateListeners(view: EditorView): void {
-  ensureViewUpdateListenersField(view)
+  assertViewUpdateListenersField(view)
   view.dispatch({
-    effects: ViewUpdateListenerEffect.of({ remove: 'all' }),
+    effects: ViewUpdateListenerEffect.of({ clear: true }),
   })
 }
