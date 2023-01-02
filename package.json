@@ -7,11 +7,13 @@
     "examples/react/*"
   ],
   "scripts": {
-    "clean": "yarn workspaces foreach -pt --exclude '@codemirror-toolkit/example-*' run clean",
-    "build": "yarn workspaces foreach -pt --exclude '@codemirror-toolkit/example-*' run build",
+    "postinstall": "husky install",
     "lint": "eslint . --cache --fix",
-    "lint:ci": "eslint . --cache --fix --max-warnings 0",
-    "postinstall": "husky install"
+    "lint:ci": "eslint . --cache --cache-location ./node_modules/.cache/eslint/.eslintcache --max-warnings 0",
+    "format": "prettier --write --cache .",
+    "format:check": "prettier --check --cache .",
+    "clean": "yarn workspaces foreach -pt --exclude '@codemirror-toolkit/example-*' run clean",
+    "build": "yarn workspaces foreach -pt --exclude '@codemirror-toolkit/example-*' run build"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
