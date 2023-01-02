@@ -7,6 +7,7 @@ import type {
   ProvidedCodeMirrorConfig,
   UseCodeMirrorHook,
   UseContainerRefHook,
+  UseViewDispatchHook,
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
@@ -27,6 +28,7 @@ export interface CodeMirrorContext<ContainerElement extends Element = Element> {
   useCodeMirror: UseCodeMirrorHook<ContainerElement>
   useView: UseViewHook
   useViewEffect: UseViewEffectHook
+  useViewDispatch: UseViewDispatchHook
   useContainerRef: UseContainerRefHook<ContainerElement>
 }
 
@@ -64,6 +66,11 @@ export function createCodeMirrorContext<
     return codeMirror.useViewEffect(effect, deps)
   }
 
+  const useViewDispatch: UseViewDispatchHook = () => {
+    const codeMirror = useCodeMirror()
+    return codeMirror.useViewDispatch()
+  }
+
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
     const codeMirror = useCodeMirror()
     return codeMirror.useContainerRef()
@@ -74,6 +81,7 @@ export function createCodeMirrorContext<
     useCodeMirror,
     useView,
     useViewEffect,
+    useViewDispatch,
     useContainerRef,
   }
 }

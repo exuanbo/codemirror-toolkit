@@ -1,6 +1,6 @@
 import type { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-import { useDebugValue, useEffect } from 'react'
+import { useCallback, useDebugValue, useEffect } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
 
 import type {
@@ -9,6 +9,7 @@ import type {
   GetView,
   ProvidedCodeMirrorConfig,
   UseContainerRefHook,
+  UseViewDispatchHook,
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
@@ -73,6 +74,16 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }, [view, ...deps])
   }
 
+  const useViewDispatch: UseViewDispatchHook = () => {
+    const view = useView()
+    return useCallback(
+      (...args) => {
+        view?.dispatch(...args)
+      },
+      [view],
+    )
+  }
+
   const createContainerRef = (): ContainerRef<ContainerElement> => {
     let currentContainer: ContainerElement | null = null
     const callbackScheduler = createCallbackScheduler()
@@ -109,6 +120,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     getView,
     useView,
     useViewEffect,
+    useViewDispatch,
     useContainerRef,
   }
 }
