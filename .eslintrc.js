@@ -1,9 +1,11 @@
 // @ts-check
 /** @typedef {import('eslint').Linter.Config} Config */
 
+const defaultConfig = require.resolve('@codemirror-toolkit/config/eslint')
+
 /** @type {Config} */
 const config = {
-  extends: ['./packages/config/eslint.cjs'],
+  extends: [defaultConfig],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],

@@ -1,7 +1,7 @@
 // @ts-check
 /** @typedef {import('prettier').Config} Config */
 
-const { standardOptions } = require('@codemirror-toolkit/config/prettier.cjs')
+const { standardOptions } = require('@codemirror-toolkit/config/prettier')
 
 /** @type {Config} */
 const config = {

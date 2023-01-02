@@ -1,8 +1,25 @@
 {
   "name": "@codemirror-toolkit/config",
   "private": true,
-  "type": "module",
   "exports": {
-    "./*": "./*"
+    "./*": {
+      "require": {
+        "types": "./*.d.ts",
+        "default": "./*.js"
+      },
+      "import": {
+        "types": "./*.d.mts",
+        "default": "./*.mjs"
+      }
+    },
+    "./*.js": {
+      "types": "./*.d.ts",
+      "default": "./*.js"
+    },
+    "./*.mjs": {
+      "types": "./*.d.mts",
+      "default": "./*.mjs"
+    },
+    "./*.json": "./*.json"
   }
 }

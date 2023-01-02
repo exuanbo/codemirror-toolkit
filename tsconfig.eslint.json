@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Modules
+    "moduleResolution": "Node",
+    // Emit
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    // Projects
+    "composite": false,
+    "incremental": false
+  },
+  "include": ["."],
+  "references": []
+}
