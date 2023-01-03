@@ -1,10 +1,17 @@
 # @codemirror-toolkit/example-react-view-update-listener
 
-To run this example:
+## Preview
+
+```sh
+yarn install
+yarn run dev
+```
+
+## Development
 
 ```sh
 # In root directory
 yarn install
 yarn workspace @codemirror-toolkit/monorepo run build
-yarn workspace @codemirror-toolkit/example-react-view-update-listener dev
+yarn workspace @codemirror-toolkit/example-react-view-update-listener run dev
 ```

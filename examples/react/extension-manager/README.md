@@ -1,10 +1,17 @@
 # @codemirror-toolkit/example-react-extension-manager
 
-To run this example:
+## Preview
+
+```sh
+yarn install
+yarn run dev
+```
+
+## Development
 
 ```sh
 # In root directory
 yarn install
 yarn workspace @codemirror-toolkit/monorepo run build
-yarn workspace @codemirror-toolkit/example-react-extension-manager dev
+yarn workspace @codemirror-toolkit/example-react-extension-manager run dev
 ```
