@@ -2,7 +2,7 @@ import './App.css'
 
 import { EditorState, Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-import { createCodeMirrorContext } from '@codemirror-toolkit/react'
+import { createCodeMirrorWithContext } from '@codemirror-toolkit/react'
 import { useRef, useState } from 'react'
 
 const defaultThemeExtension = EditorView.theme({
@@ -14,7 +14,8 @@ const defaultThemeExtension = EditorView.theme({
 const readOnlyExtension = EditorState.readOnly.of(true)
 const nonEditableExtension = EditorView.editable.of(false)
 
-const { Provider: CodeMirrorProvider, useContainerRef } = createCodeMirrorContext<HTMLDivElement>()
+const { Provider: CodeMirrorProvider, useContainerRef } =
+  createCodeMirrorWithContext<HTMLDivElement>('CodeMirrorContext')
 
 function Editor() {
   const containerRef = useContainerRef()

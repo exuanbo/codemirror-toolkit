@@ -1,3 +1,3 @@
-export * from './codeMirror.js'
-export * from './codeMirrorContext.js'
+export * from './context.js'
+export * from './create.js'
 export * from './types.js'

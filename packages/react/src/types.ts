@@ -2,8 +2,8 @@ import type { EditorState } from '@codemirror/state'
 import type { EditorView, EditorViewConfig } from '@codemirror/view'
 import type { DependencyList, EffectCallback, MutableRefObject } from 'react'
 
-export type EditorViewConfigWithoutParent = Omit<EditorViewConfig, 'parent'>
-export interface CodeMirrorConfig extends EditorViewConfigWithoutParent {}
+export type EditorViewConfigWithoutParentElement = Omit<EditorViewConfig, 'parent'>
+export interface CodeMirrorConfig extends EditorViewConfigWithoutParentElement {}
 
 export type CodeMirrorConfigCreator = (prevState: EditorState | undefined) => CodeMirrorConfig
 export type ProvidedCodeMirrorConfig = CodeMirrorConfig | CodeMirrorConfigCreator
@@ -30,5 +30,3 @@ export interface CodeMirror<ContainerElement extends Element = Element> {
   useViewDispatch: UseViewDispatchHook
   useContainerRef: UseContainerRefHook<ContainerElement>
 }
-export type UseCodeMirrorHook<ContainerElement extends Element = Element> =
-  () => CodeMirror<ContainerElement>
