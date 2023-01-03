@@ -7,6 +7,8 @@ yarn install
 yarn run dev
 ```
 
+## Development
+
 ```sh
 # In root directory
 yarn install
