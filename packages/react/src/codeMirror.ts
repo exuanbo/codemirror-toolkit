@@ -13,6 +13,7 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
+import { batch } from './utils/batch.js'
 import { createCallbackScheduler } from './utils/callbackScheduler.js'
 import { isFunction } from './utils/isFunction.js'
 import { useSingleton } from './utils/useSingleton.js'
@@ -98,16 +99,18 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
         }
         currentContainer = container
         callbackScheduler.cancel()
-        callbackScheduler.request(() => {
-          setView(undefined)
-          if (container) {
-            const view = new EditorView({
-              ...createConfig(),
-              parent: container,
-            })
-            setView(view)
-          }
-        })
+        callbackScheduler.request(() =>
+          batch(() => {
+            setView(undefined)
+            if (container) {
+              const view = new EditorView({
+                ...createConfig(),
+                parent: container,
+              })
+              setView(view)
+            }
+          }),
+        )
       },
     }
   }

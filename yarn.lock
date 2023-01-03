@@ -374,16 +374,22 @@ __metadata:
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.7.1
     "@types/react": ^18.0.26
+    "@types/react-dom": ^18.0.10
     "@types/use-sync-external-store": ^0.0.3
     react: ^18.2.0
+    react-dom: ^18.2.0
     use-sync-external-store: ^1.2.0
   peerDependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@types/react": ^17.0.0 || ^18.0.0
+    "@types/react-dom": ^17.0.0 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
+      optional: true
+    "@types/react-dom":
       optional: true
   languageName: unknown
   linkType: soft
