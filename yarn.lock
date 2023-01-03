@@ -333,7 +333,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/extensions@workspace:packages/extensions"
   dependencies:
-    "@codemirror-toolkit/utils": ^0.1.0
+    "@codemirror-toolkit/utils": ^0.1.1
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.7.1
   peerDependencies:
@@ -394,7 +394,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/utils@^0.1.0, @codemirror-toolkit/utils@workspace:packages/utils":
+"@codemirror-toolkit/utils@^0.1.1, @codemirror-toolkit/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/utils@workspace:packages/utils"
   dependencies:
