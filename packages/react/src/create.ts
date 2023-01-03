@@ -17,6 +17,7 @@ import { batch } from './utils/batch.js'
 import { createCallbackScheduler } from './utils/callbackScheduler.js'
 import { isFunction } from './utils/isFunction.js'
 import { useSingleton } from './utils/useSingleton.js'
+import { useSyncedRef } from './utils/useSyncedRef.js'
 
 export function createCodeMirror<ContainerElement extends Element = Element>(
   config?: ProvidedCodeMirrorConfig,
@@ -78,11 +79,20 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }, [view, ...deps])
   }
 
-  const useViewDispatch: UseViewDispatchHook = () =>
-    useCallback((...args) => {
-      const view = getView()
-      view?.dispatch(...args)
-    }, [])
+  const useViewDispatch: UseViewDispatchHook = onViewNotReady => {
+    const viewNotReadyCallbackRef = useSyncedRef(onViewNotReady)
+    return useCallback(
+      (...args) => {
+        const view = getView()
+        if (!view) {
+          const callback = viewNotReadyCallbackRef.current
+          return callback?.()
+        }
+        view.dispatch(...args)
+      },
+      [viewNotReadyCallbackRef],
+    )
+  }
 
   let containerRef: ContainerRef<ContainerElement> | undefined
 
