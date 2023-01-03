@@ -73,7 +73,7 @@ function App() {
 }
 ```
 
-:warning: An instance of `EditorView` will be created **only when** `containerRef.current` is assigned with a DOM node, and destroyed **only when** `containerRef.current` is assigned back with `null`.
+:warning: An instance of `EditorView` will be created **only when** a DOM node is assigned to `containerRef.current`, and will be destroyed **only when** `containerRef.current` is set back to `null`.
 
 ### With Context Provider
 
