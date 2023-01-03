@@ -10,6 +10,7 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
+import { toPascalCase } from './utils/toPascalCase.js'
 import { useSingleton } from './utils/useSingleton.js'
 
 export interface CodeMirrorProviderProps {
@@ -49,7 +50,7 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
   }
 
   if (displayName) {
-    displayName = displayName[0].toUpperCase() + displayName.slice(1)
+    displayName = toPascalCase(displayName)
     CodeMirrorProvider.displayName = `${displayName}.Provider`
     InternalCodeMirrorContext.displayName = `Internal${displayName}`
   }
