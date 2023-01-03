@@ -31,8 +31,8 @@ function Editor() {
   const toggleReadOnly = () => {
     const view = getView()
     if (view) {
-      const addOrRemove = isReadOnly ? removeExtension : addExtension
-      addOrRemove(view, [readOnlyExtension, readOnlyThemeExtension], { flattenDepth: 1 })
+      const toggleExtension = isReadOnly ? removeExtension : addExtension
+      toggleExtension(view, [readOnlyExtension, readOnlyThemeExtension], { flattenDepth: 1 })
       setReadOnly(!isReadOnly)
     }
   }

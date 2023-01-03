@@ -29,15 +29,15 @@ function App() {
   const extensionSetRef = useRef(new Set<Extension>())
   const handleReadOnlyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked
-    setReadOnly(isChecked)
     const extensionSet = extensionSetRef.current
     extensionSet[isChecked ? 'add' : 'delete'](readOnlyExtension)
+    setReadOnly(isChecked)
   }
   const handleEditableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked
-    setEditable(isChecked)
     const extensionSet = extensionSetRef.current
     extensionSet[isChecked ? 'delete' : 'add'](nonEditableExtension)
+    setEditable(isChecked)
   }
   return (
     <CodeMirrorProvider
