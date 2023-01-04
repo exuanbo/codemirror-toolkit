@@ -78,17 +78,17 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   }
 
   const useViewDispatch: UseViewDispatchHook = onViewNotReady => {
-    const viewNotReadyCallbackRef = useSyncedRef(onViewNotReady)
+    const viewNotReadyHandlerRef = useSyncedRef(onViewNotReady)
     return useCallback(
-      (...args) => {
+      (...specs) => {
         const view = getView()
         if (!view) {
-          const callback = viewNotReadyCallbackRef.current
-          return callback?.()
+          const fn = viewNotReadyHandlerRef.current
+          return fn?.(...specs)
         }
-        view.dispatch(...args)
+        view.dispatch(...specs)
       },
-      [viewNotReadyCallbackRef],
+      [viewNotReadyHandlerRef],
     )
   }
 
