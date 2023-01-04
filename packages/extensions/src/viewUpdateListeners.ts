@@ -25,19 +25,14 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
     return transaction.effects.reduce(
       (resultListeners, effect) =>
         effect.is(ViewUpdateListenerEffect)
-          ? mapStateEffectValue(
-              effect,
-              ({
-                add: listenersToAdd = [],
-                remove: listenersToRemove = [],
-                removeAll: shouldRemoveAllListeners = false,
-              }) => {
-                const remainingListeners = shouldRemoveAllListeners
-                  ? resultListeners.clear()
-                  : resultListeners
-                return remainingListeners.deleteMany(listenersToRemove).addMany(listenersToAdd)
-              },
-            )
+          ? mapStateEffectValue(effect, listenerAction => {
+              const remainingListeners = listenerAction.removeAll
+                ? resultListeners.clear()
+                : resultListeners
+              return remainingListeners
+                .deleteMany(listenerAction.remove ?? [])
+                .addMany(listenerAction.add ?? [])
+            })
           : resultListeners,
       listeners,
     )
