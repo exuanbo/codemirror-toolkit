@@ -1,6 +1,7 @@
 import type { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { useCallback, useDebugValue, useEffect } from 'react'
+import { unstable_batchedUpdates as batch } from 'react-dom'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
 
 import type {
@@ -14,7 +15,6 @@ import type {
   UseViewHook,
 } from './types.js'
 import { createAsyncScheduler } from './utils/asyncScheduler.js'
-import { batchUpdates } from './utils/batchUpdates.js'
 import { isFunction } from './utils/isFunction.js'
 import { useSingleton } from './utils/useSingleton.js'
 import { useSyncedRef } from './utils/useSyncedRef.js'
@@ -108,7 +108,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
         currentContainer = container
         asyncScheduler.cancel()
         asyncScheduler.request(() =>
-          batchUpdates(() => {
+          batch(() => {
             setView(undefined)
             if (container) {
               const view = new EditorView({
