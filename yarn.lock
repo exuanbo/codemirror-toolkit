@@ -280,7 +280,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/example-react-with-context@workspace:examples/react/with-context"
   dependencies:
-    "@codemirror-toolkit/react": ^0.2.0
+    "@codemirror-toolkit/react": ^0.2.1
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.7.1
     "@types/react": ^18.0.26
@@ -298,7 +298,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-extension-manager@workspace:examples/react/with-extension-manager"
   dependencies:
     "@codemirror-toolkit/extensions": ^0.3.0
-    "@codemirror-toolkit/react": ^0.2.0
+    "@codemirror-toolkit/react": ^0.2.1
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.7.1
     "@types/react": ^18.0.26
@@ -316,7 +316,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-view-update-listener@workspace:examples/react/with-view-update-listener"
   dependencies:
     "@codemirror-toolkit/extensions": ^0.3.0
-    "@codemirror-toolkit/react": ^0.2.0
+    "@codemirror-toolkit/react": ^0.2.1
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.7.1
     "@types/react": ^18.0.26
@@ -367,7 +367,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/react@^0.2.0, @codemirror-toolkit/react@workspace:packages/react":
+"@codemirror-toolkit/react@^0.2.1, @codemirror-toolkit/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/react@workspace:packages/react"
   dependencies:
