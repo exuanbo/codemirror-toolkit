@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/exuanbo/codemirror-toolkit/tree/main/packages/extensions#readme",
   "dependencies": {
-    "@codemirror-toolkit/utils": "^0.1.1"
+    "@codemirror-toolkit/utils": "^0.2.0"
   },
   "peerDependencies": {
     "@codemirror/state": "^6.0.0",
