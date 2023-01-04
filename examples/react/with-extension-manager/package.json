@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@codemirror-toolkit/extensions": "^0.2.0",
+    "@codemirror-toolkit/extensions": "^0.3.0",
     "@codemirror-toolkit/react": "^0.2.0",
     "@codemirror/state": "^6.2.0",
     "@codemirror/view": "^6.7.1",
