@@ -10,7 +10,7 @@ export type ViewUpdateListener = (update: ViewUpdate) => void
 export interface ViewUpdateListenerAction {
   add?: ViewUpdateListener[]
   remove?: ViewUpdateListener[]
-  clear?: boolean
+  removeAll?: boolean
 }
 
 export const ViewUpdateListenerEffect = /*#__PURE__*/ StateEffect.define<ViewUpdateListenerAction>()
@@ -30,12 +30,12 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
               ({
                 add: listenersToAdd = [],
                 remove: listenersToRemove = [],
-                clear: shouldClearListeners = false,
+                removeAll: shouldRemoveAllListeners = false,
               }) => {
-                const clearedListeners = shouldClearListeners
+                const remainingListeners = shouldRemoveAllListeners
                   ? resultListeners.clear()
                   : resultListeners
-                return clearedListeners.deleteMany(listenersToRemove).addMany(listenersToAdd)
+                return remainingListeners.deleteMany(listenersToRemove).addMany(listenersToAdd)
               },
             )
           : resultListeners,
@@ -81,9 +81,9 @@ export function removeViewUpdateListener(view: EditorView, listener: ViewUpdateL
   })
 }
 
-export function clearViewUpdateListeners(view: EditorView): void {
+export function removeAllViewUpdateListeners(view: EditorView): void {
   assertViewUpdateListenersField(view)
   view.dispatch({
-    effects: ViewUpdateListenerEffect.of({ clear: true }),
+    effects: ViewUpdateListenerEffect.of({ removeAll: true }),
   })
 }
