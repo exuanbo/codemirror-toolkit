@@ -10,12 +10,12 @@ function safeRequestAnimationFrame(callback: () => void): CancelRequest {
   }
 }
 
-interface CallbackScheduler {
+interface AsyncScheduler {
   request: (callback: () => void) => void
   cancel: () => void
 }
 
-export function createCallbackScheduler(): CallbackScheduler {
+export function createAsyncScheduler(): AsyncScheduler {
   let cancelLastRequest: CancelRequest | undefined
   return {
     request: callback => {
