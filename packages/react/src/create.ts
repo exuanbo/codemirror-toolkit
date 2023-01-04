@@ -58,13 +58,11 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
 
   const getView: GetView = () => currentView
 
+  // EditorView will never be created on the server
+  const getServerView: GetView = () => undefined
+
   const useView: UseViewHook = () => {
-    const view = useSyncExternalStore(
-      subscribeViewUpdate,
-      getView,
-      // EditorView will never be created on the server
-      () => undefined,
-    )
+    const view = useSyncExternalStore(subscribeViewUpdate, getView, getServerView)
     useDebugValue(view)
     return view
   }
