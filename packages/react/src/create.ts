@@ -14,7 +14,7 @@ import type {
   UseViewHook,
 } from './types.js'
 import { createAsyncScheduler } from './utils/asyncScheduler.js'
-import { batch } from './utils/batch.js'
+import { batchUpdates } from './utils/batchUpdates.js'
 import { isFunction } from './utils/isFunction.js'
 import { useSingleton } from './utils/useSingleton.js'
 import { useSyncedRef } from './utils/useSyncedRef.js'
@@ -108,7 +108,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
         currentContainer = container
         asyncScheduler.cancel()
         asyncScheduler.request(() =>
-          batch(() => {
+          batchUpdates(() => {
             setView(undefined)
             if (container) {
               const view = new EditorView({
