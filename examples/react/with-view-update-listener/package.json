@@ -1,5 +1,5 @@
 {
-  "name": "@codemirror-toolkit/example-react-extension-manager",
+  "name": "@codemirror-toolkit/example-react-with-view-update-listener",
   "private": true,
   "type": "module",
   "scripts": {

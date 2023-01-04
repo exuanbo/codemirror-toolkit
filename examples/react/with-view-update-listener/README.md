@@ -1,4 +1,4 @@
-# @codemirror-toolkit/example-react-with-context
+# @codemirror-toolkit/example-react-with-view-update-listener
 
 ## Preview
 
@@ -13,5 +13,5 @@ npm run dev
 # In root directory
 yarn install
 yarn workspace @codemirror-toolkit/monorepo run build
-yarn workspace @codemirror-toolkit/example-react-with-context run dev
+yarn workspace @codemirror-toolkit/example-react-with-view-update-listener run dev
 ```
