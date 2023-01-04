@@ -1,3 +1,3 @@
 export * from './rangeSet.js'
-export * from './setContainer.js'
+export * from './setProxy.js'
 export * from './state.js'

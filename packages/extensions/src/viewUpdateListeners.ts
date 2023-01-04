@@ -2,8 +2,8 @@ import type { Extension } from '@codemirror/state'
 import { StateEffect, StateField } from '@codemirror/state'
 import type { ViewUpdate } from '@codemirror/view'
 import { EditorView } from '@codemirror/view'
-import type { SetContainer } from '@codemirror-toolkit/utils'
-import { createSetContainer, mapStateEffectValue } from '@codemirror-toolkit/utils'
+import type { SetProxy } from '@codemirror-toolkit/utils'
+import { createSetProxy, mapStateEffectValue } from '@codemirror-toolkit/utils'
 
 export type ViewUpdateListener = (update: ViewUpdate) => void
 
@@ -15,11 +15,11 @@ export interface ViewUpdateListenerAction {
 
 export const ViewUpdateListenerEffect = /*#__PURE__*/ StateEffect.define<ViewUpdateListenerAction>()
 
-type ViewUpdateListenerSetContainer = SetContainer<ViewUpdateListener>
+type ViewUpdateListenerSetProxy = SetProxy<ViewUpdateListener>
 
-const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListenerSetContainer>({
+const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListenerSetProxy>({
   create() {
-    return createSetContainer()
+    return createSetProxy()
   },
   update(listeners, transaction) {
     return transaction.effects.reduce(
@@ -44,15 +44,15 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
   },
   provide(thisField) {
     return EditorView.updateListener.computeN([thisField], state => {
-      const listenerSetContainer = state.field(thisField)
-      return [...listenerSetContainer.extract()]
+      const listenerSetProxy = state.field(thisField)
+      return [...listenerSetProxy.unwrap()]
     })
   },
 })
 
 export function viewUpdateListeners(...initialListeners: ViewUpdateListener[]): Extension {
   return viewUpdateListenersField.init(() =>
-    createSetContainer<ViewUpdateListener>().addMany(initialListeners),
+    createSetProxy<ViewUpdateListener>().addMany(initialListeners),
   )
 }
 
