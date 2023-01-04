@@ -30,8 +30,8 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
                 ? resultListeners.clear()
                 : resultListeners
               return remainingListeners
-                .deleteMany(listenerAction.remove ?? [])
                 .addMany(listenerAction.add ?? [])
+                .deleteMany(listenerAction.remove ?? [])
             })
           : resultListeners,
       listeners,
