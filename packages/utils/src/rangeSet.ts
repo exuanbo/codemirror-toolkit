@@ -17,9 +17,8 @@ export function mapRangeSetToArray<T extends RangeValue, U>(
   rangeSet: RangeSet<T>,
   callbackfn: RangeValueCallback<T, U>,
 ): U[] {
-  const valueCount = rangeSet.size
-  const values = new Array<U>(valueCount)
-  if (valueCount > 0) {
+  const values = new Array<U>(rangeSet.size)
+  if (values.length) {
     let valueIndex = 0
     for (const rangeCursor = rangeSet.iter(); rangeCursor.value !== null; rangeCursor.next()) {
       values[valueIndex++] = callbackfn(rangeCursor.value, rangeCursor.from, rangeCursor.to)
@@ -51,16 +50,18 @@ export function reduceRangeSet<T extends RangeValue, U extends {}>(
   callbackfn: RangeValueReduceCallback<T, T | U>,
   initialValue?: U,
 ): T | U {
-  const rangeCursor = rangeSet.iter()
-  if (!rangeCursor.value) {
+  if (!rangeSet.size) {
     if (initialValue == null) {
       throw new TypeError('Reduce of empty RangeSet with no initial value')
     }
     return initialValue
   }
+  const rangeCursor = rangeSet.iter()
   let accumulator: T | U
   if (initialValue == null) {
-    accumulator = rangeCursor.value
+    // rangeSet.size is already checked
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    accumulator = rangeCursor.value!
     rangeCursor.next()
   } else {
     accumulator = initialValue
