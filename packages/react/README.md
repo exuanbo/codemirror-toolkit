@@ -136,8 +136,8 @@ type ViewEffectCallback = (view: EditorView) => ViewEffectCleanup
 type UseViewEffectHook = (effect: ViewEffectCallback, deps: DependencyList) => void
 
 type ViewDispath = InstanceType<typeof EditorView>['dispatch']
-type ViewNotReadyCallback = () => void
-type UseViewDispatchHook = (onViewNotReady?: ViewNotReadyCallback) => ViewDispath
+type ViewNotReadyHandler = ViewDispath
+type UseViewDispatchHook = (onViewNotReady?: ViewNotReadyHandler) => ViewDispath
 
 type ContainerRef<ContainerElement extends Element = Element> =
   MutableRefObject<ContainerElement | null>
@@ -187,7 +187,7 @@ interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
   useContainerRef: UseContainerRefHook<ContainerElement>
 }
 
-function createCodeMirrorWithContext<ContainerElement extends Element>(
+function createCodeMirrorWithContext<ContainerElement extends Element = Element>(
   displayName?: string | false,
 ): CodeMirrorWithContext<ContainerElement>
 ```
