@@ -19,7 +19,7 @@
     "emitDeclarationOnly": true,
 
     // Interop Constraints
-    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
 
