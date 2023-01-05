@@ -31,7 +31,6 @@ const config = {
           {
             callbacksLast: true,
             shorthandFirst: true,
-            multiline: 'last',
             reservedFirst: true,
           },
         ],
