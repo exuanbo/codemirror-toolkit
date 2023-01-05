@@ -1,11 +1,10 @@
-import type { DependencyList, EffectCallback } from 'react'
-import React from 'react'
+import * as React from 'react'
 
 const isBrowser = typeof window !== 'undefined'
 
 const builtInAPI = React.useInsertionEffect
 
-function syncFallback(effect: EffectCallback, _deps?: DependencyList): void {
+const syncFallback: typeof builtInAPI = function (effect) {
   effect()
 }
 
