@@ -23,12 +23,18 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement> {
   let prevState: EditorState | undefined
+  let currentView: EditorView | undefined
 
   function createConfig() {
     return (isFunction(config) ? config : () => config)(prevState)
   }
 
-  let currentView: EditorView | undefined
+  function createView(container: ContainerElement) {
+    return new EditorView({
+      ...createConfig(),
+      parent: container,
+    })
+  }
 
   type ViewUpdateCallback = () => void
   const viewUpdateCallbacks = new Set<ViewUpdateCallback>()
@@ -111,11 +117,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
           batch(() => {
             setView(undefined)
             if (container) {
-              const view = new EditorView({
-                ...createConfig(),
-                parent: container,
-              })
-              setView(view)
+              setView(createView(container))
             }
           }),
         )
