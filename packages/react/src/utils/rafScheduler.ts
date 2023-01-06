@@ -1,6 +1,6 @@
-type CancelRequest = () => void
+type CancelFrameRequest = () => void
 
-function safeRequestAnimationFrame(callback: () => void): CancelRequest {
+function requestAnimationFrameWithFallback(callback: () => void): CancelFrameRequest {
   if (window.requestAnimationFrame && window.self === window.top) {
     const requestId = window.requestAnimationFrame(callback)
     return () => window.cancelAnimationFrame(requestId)
@@ -10,24 +10,24 @@ function safeRequestAnimationFrame(callback: () => void): CancelRequest {
   }
 }
 
-interface AsyncScheduler {
+interface RafScheduler {
   request: (callback: () => void) => void
   cancel: () => void
 }
 
-export function createAsyncScheduler(): AsyncScheduler {
-  let cancelLastRequest: CancelRequest | undefined
+export function createRafScheduler(): RafScheduler {
+  let cancelFrameRequest: CancelFrameRequest | undefined
   return {
     request: callback => {
-      cancelLastRequest = safeRequestAnimationFrame(() => {
-        cancelLastRequest = undefined
+      cancelFrameRequest = requestAnimationFrameWithFallback(() => {
+        cancelFrameRequest = undefined
         callback()
       })
     },
     cancel: () => {
-      if (cancelLastRequest) {
-        cancelLastRequest()
-        cancelLastRequest = undefined
+      if (cancelFrameRequest) {
+        cancelFrameRequest()
+        cancelFrameRequest = undefined
       }
     },
   }

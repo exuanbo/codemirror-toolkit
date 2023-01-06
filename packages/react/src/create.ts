@@ -14,8 +14,8 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
-import { createAsyncScheduler } from './utils/asyncScheduler.js'
 import { isFunction } from './utils/isFunction.js'
+import { createRafScheduler } from './utils/rafScheduler.js'
 import { useSingleton } from './utils/useSingleton.js'
 import { useSyncedRef } from './utils/useSyncedRef.js'
 
@@ -102,7 +102,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
 
   function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null
-    const asyncScheduler = createAsyncScheduler()
+    const rafScheduler = createRafScheduler()
     return {
       get current() {
         return currentContainer
@@ -112,8 +112,8 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
           return
         }
         currentContainer = container
-        asyncScheduler.cancel()
-        asyncScheduler.request(() =>
+        rafScheduler.cancel()
+        rafScheduler.request(() =>
           batch(() => {
             setView(undefined)
             if (container) {
