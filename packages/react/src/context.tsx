@@ -35,7 +35,7 @@ export interface CodeMirrorWithContext<ContainerElement extends Element = Elemen
   useContainerRef: UseContainerRefHook<ContainerElement>
 }
 
-export function createCodeMirrorWithContext<ContainerElement extends Element = Element>(
+export function createCodeMirrorWithContext<ContainerElement extends Element>(
   displayName?: string | false,
 ): CodeMirrorWithContext<ContainerElement> {
   const InternalCodeMirrorContext = createContext<CodeMirror<ContainerElement> | null>(null)

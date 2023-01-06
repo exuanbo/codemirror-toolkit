@@ -156,7 +156,7 @@ interface CodeMirror<ContainerElement extends Element = Element> {
 ### `createCodeMirror`
 
 ```ts
-function createCodeMirror<ContainerElement extends Element = Element>(
+function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement>
 ```
@@ -187,7 +187,7 @@ interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
   useContainerRef: UseContainerRefHook<ContainerElement>
 }
 
-function createCodeMirrorWithContext<ContainerElement extends Element = Element>(
+function createCodeMirrorWithContext<ContainerElement extends Element>(
   displayName?: string | false,
 ): CodeMirrorWithContext<ContainerElement>
 ```

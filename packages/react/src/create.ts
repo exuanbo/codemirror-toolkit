@@ -19,7 +19,7 @@ import { createRafScheduler } from './utils/rafScheduler.js'
 import { useSingleton } from './utils/useSingleton.js'
 import { useSyncedRef } from './utils/useSyncedRef.js'
 
-export function createCodeMirror<ContainerElement extends Element = Element>(
+export function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement> {
   let prevState: EditorState | undefined
