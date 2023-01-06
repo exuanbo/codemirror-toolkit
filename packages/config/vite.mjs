@@ -33,7 +33,6 @@ export function createViteConfig(config) {
 /**
  * @param {(string | RegExp)[]} target
  * @param {ExternalOption} [source]
- * @returns {ExternalOption} Merged {@link ExternalOption}
  */
 function mergeExternalOption(target, source) {
   if (Array.isArray(source)) {
