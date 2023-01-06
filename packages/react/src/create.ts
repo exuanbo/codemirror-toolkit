@@ -41,9 +41,7 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   function subscribeViewUpdate(callback: ViewUpdateCallback) {
     viewUpdateCallbacks.add(callback)
-    return () => {
-      viewUpdateCallbacks.delete(callback)
-    }
+    return () => viewUpdateCallbacks.delete(callback)
   }
 
   function publishViewUpdate() {
