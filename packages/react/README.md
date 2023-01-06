@@ -28,7 +28,7 @@ First create an instance with your configuration as an object or a factory funct
 ```tsx
 import { createCodeMirror } from '@codemirror-toolkit/react'
 
-const codeMirror = createCodeMirror<HTMLDivElement>(prevState => ({
+const codeMirror = createCodeMirror<HTMLDivElement>((prevState) => ({
   doc: prevState?.doc ?? 'Hello World!',
   // ...otherConfig,
 }))
@@ -48,7 +48,7 @@ function Editor() {
 function App() {
   const [showEditor, setShowEditor] = useState(true)
   const [lastInput, setLastInput] = useState('')
-  useViewEffect(view => {
+  useViewEffect((view) => {
     console.log('EditorView is created')
     return () => {
       console.log('EditorView will be destroyed')

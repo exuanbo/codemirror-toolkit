@@ -25,7 +25,7 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
     return transaction.effects.reduce(
       (resultListeners, effect) =>
         effect.is(ViewUpdateListenerEffect)
-          ? mapStateEffectValue(effect, listenerAction => {
+          ? mapStateEffectValue(effect, (listenerAction) => {
               const remainingListeners = listenerAction.removeAll
                 ? resultListeners.clear()
                 : resultListeners
@@ -38,7 +38,7 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
     )
   },
   provide(thisField) {
-    return EditorView.updateListener.computeN([thisField], state => {
+    return EditorView.updateListener.computeN([thisField], (state) => {
       const listenerSetProxy = state.field(thisField)
       return [...listenerSetProxy.unwrap()]
     })

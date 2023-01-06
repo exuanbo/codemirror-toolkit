@@ -48,7 +48,7 @@ function flattenExtensions(extensions: readonly Extension[], depth: number): rea
   if (depth <= 0) {
     return extensions
   }
-  return extensions.flatMap(extension => {
+  return extensions.flatMap((extension) => {
     if (!isExtensionArray(extension)) {
       return extension
     }

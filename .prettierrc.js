@@ -8,14 +8,7 @@ const config = {
   ...standardOptions,
   printWidth: 100,
   trailingComma: 'all',
-  overrides: [
-    {
-      files: '*.md',
-      options: {
-        printWidth: 90,
-      },
-    },
-  ],
+  arrowParens: 'always',
 }
 
 module.exports = config

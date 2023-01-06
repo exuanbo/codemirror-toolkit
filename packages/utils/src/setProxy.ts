@@ -48,10 +48,10 @@ export const SetProxyUtils = /*#__PURE__*/ Object.freeze({
 
 export function createSetProxy<T extends {}>(set: Set<T> = new Set()): SetProxy<T> {
   const proxy: SetProxy<T> = {
-    add: value => SetProxyUtils.add(proxy, value),
-    addMany: values => values.reduce<SetProxy<T>>(SetProxyUtils.add, proxy),
-    delete: value => SetProxyUtils.delete(proxy, value),
-    deleteMany: values => values.reduce<SetProxy<T>>(SetProxyUtils.delete, proxy),
+    add: (value) => SetProxyUtils.add(proxy, value),
+    addMany: (values) => values.reduce<SetProxy<T>>(SetProxyUtils.add, proxy),
+    delete: (value) => SetProxyUtils.delete(proxy, value),
+    deleteMany: (values) => values.reduce<SetProxy<T>>(SetProxyUtils.delete, proxy),
     clear: () => SetProxyUtils.clear(proxy),
     unwrap: () => set,
   }

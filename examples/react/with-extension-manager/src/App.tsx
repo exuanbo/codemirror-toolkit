@@ -11,7 +11,8 @@ const readOnlyThemeExtension = EditorView.theme({
   },
 })
 
-const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>(prevState => ({
+// prettier-ignore
+const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((prevState) => ({
   doc: prevState?.doc ?? 'Hello World!',
   extensions: [
     EditorView.theme({
@@ -25,7 +26,7 @@ const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElem
 
 function Editor() {
   const [isReadOnly, setReadOnly] = useState(false)
-  useViewEffect(view => {
+  useViewEffect((view) => {
     setReadOnly(view.state.readOnly)
   }, [])
   const toggleReadOnly = () => {

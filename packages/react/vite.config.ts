@@ -5,7 +5,7 @@ export default createViteConfig({
     rollupOptions: {
       external: [/^react/, /^use-sync-external-store/],
       output: {
-        interop: id => (id === 'react' ? 'esModule' : 'default'),
+        interop: (id) => (id === 'react' ? 'esModule' : 'default'),
       },
     },
   },

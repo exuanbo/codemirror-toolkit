@@ -41,7 +41,7 @@ function App() {
   }
   return (
     <CodeMirrorProvider
-      config={prevState => {
+      config={(prevState) => {
         const extensionSet = extensionSetRef.current
         return {
           doc: prevState?.doc ?? 'Hello World!',

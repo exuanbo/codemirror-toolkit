@@ -47,7 +47,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
   }
 
   function publishViewUpdate() {
-    viewUpdateCallbacks.forEach(callback => callback())
+    viewUpdateCallbacks.forEach((callback) => callback())
   }
 
   function setView(view: EditorView | undefined) {
@@ -83,7 +83,7 @@ export function createCodeMirror<ContainerElement extends Element = Element>(
     }, [view, ...deps])
   }
 
-  const useViewDispatch: UseViewDispatchHook = onViewNotReady => {
+  const useViewDispatch: UseViewDispatchHook = (onViewNotReady) => {
     const viewNotReadyHandlerRef = useSyncedRef(onViewNotReady)
     return useCallback(
       (...specs) => {

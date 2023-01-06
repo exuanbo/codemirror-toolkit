@@ -18,7 +18,7 @@ interface RafScheduler {
 export function createRafScheduler(): RafScheduler {
   let cancelFrameRequest: CancelFrameRequest | undefined
   return {
-    request: callback => {
+    request: (callback) => {
       cancelFrameRequest = requestAnimationFrameWithFallback(() => {
         cancelFrameRequest = undefined
         callback()
