@@ -66,7 +66,7 @@ export function addExtension(
   view: EditorView,
   extension: Extension,
   { flattenDepth = 0 }: ExtensionOptions = {},
-): RemoveExtension {
+): RemoveExtension | void {
   const extensionSet = getExtensionSet(view.state)
   const flattenedExtensions = flattenExtensions([extension], flattenDepth)
   let hasAdded = false
@@ -78,9 +78,9 @@ export function addExtension(
   }
   if (hasAdded) {
     updateExtensions(view, [...extensionSet])
-  }
-  return () => {
-    removeExtension(view, flattenedExtensions, { flattenDepth: 1 })
+    return () => {
+      removeExtension(view, flattenedExtensions, { flattenDepth: 1 })
+    }
   }
 }
 
