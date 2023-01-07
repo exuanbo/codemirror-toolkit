@@ -69,14 +69,14 @@ export function addExtension(
 ): RemoveExtension | void {
   const extensionSet = getExtensionSet(view.state)
   const flattenedExtensions = flattenExtensions([extension], flattenDepth)
-  let hasAdded = false
+  let didAdd = false
   for (const ext of flattenedExtensions) {
     if (!extensionSet.has(ext)) {
       extensionSet.add(ext)
-      hasAdded = true
+      didAdd = true
     }
   }
-  if (hasAdded) {
+  if (didAdd) {
     updateExtensions(view, [...extensionSet])
     return () => {
       removeExtension(view, flattenedExtensions, { flattenDepth: 1 })
@@ -91,13 +91,13 @@ export function removeExtension(
 ): void {
   const extensionSet = getExtensionSet(view.state)
   const flattenedExtensions = flattenExtensions([extension], flattenDepth)
-  let hasRemoved = false
+  let didRemove = false
   for (const ext of flattenedExtensions) {
     if (extensionSet.delete(ext)) {
-      hasRemoved = true
+      didRemove = true
     }
   }
-  if (hasRemoved) {
+  if (didRemove) {
     updateExtensions(view, [...extensionSet])
   }
 }
