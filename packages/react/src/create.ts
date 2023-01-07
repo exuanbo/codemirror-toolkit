@@ -16,7 +16,6 @@ import type {
 } from './types.js'
 import { isFunction } from './utils/isFunction.js'
 import { createRafScheduler } from './utils/rafScheduler.js'
-import { useSingleton } from './utils/useSingleton.js'
 import { useSyncedRef } from './utils/useSyncedRef.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
@@ -99,8 +98,8 @@ export function createCodeMirror<ContainerElement extends Element>(
   let containerRef: ContainerRef<ContainerElement> | undefined
 
   function createContainerRef(): ContainerRef<ContainerElement> {
-    let currentContainer: ContainerElement | null = null
     const rafScheduler = createRafScheduler()
+    let currentContainer: ContainerElement | null = null
     return Object.seal({
       get current() {
         return currentContainer
@@ -123,11 +122,11 @@ export function createCodeMirror<ContainerElement extends Element>(
     })
   }
 
-  function getContainerRef() {
+  const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
+    // The ref object will always be the same after creation
+    // But is this really a good idea, reading an external value during rendering?
     return containerRef ?? (containerRef = createContainerRef())
   }
-
-  const useContainerRef: UseContainerRefHook<ContainerElement> = () => useSingleton(getContainerRef)
 
   return {
     getView,
