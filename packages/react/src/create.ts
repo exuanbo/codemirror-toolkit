@@ -101,7 +101,7 @@ export function createCodeMirror<ContainerElement extends Element>(
   function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null
     const rafScheduler = createRafScheduler()
-    return {
+    return Object.seal({
       get current() {
         return currentContainer
       },
@@ -120,7 +120,7 @@ export function createCodeMirror<ContainerElement extends Element>(
           }),
         )
       },
-    }
+    })
   }
 
   function getContainerRef() {
