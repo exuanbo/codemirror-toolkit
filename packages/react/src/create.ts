@@ -35,16 +35,16 @@ export function createCodeMirror<ContainerElement extends Element>(
     })
   }
 
-  type ViewUpdateCallback = () => void
-  const viewUpdateCallbacks = new Set<ViewUpdateCallback>()
+  type ViewChangeCallback = () => void
+  const viewChangeCallbacks = new Set<ViewChangeCallback>()
 
-  function subscribeViewUpdate(callback: ViewUpdateCallback) {
-    viewUpdateCallbacks.add(callback)
-    return () => viewUpdateCallbacks.delete(callback)
+  function subscribeViewChange(callback: ViewChangeCallback) {
+    viewChangeCallbacks.add(callback)
+    return () => viewChangeCallbacks.delete(callback)
   }
 
-  function publishViewUpdate() {
-    viewUpdateCallbacks.forEach((callback) => callback())
+  function publishViewChange() {
+    viewChangeCallbacks.forEach((callback) => callback())
   }
 
   function setView(view: EditorView | undefined) {
@@ -56,7 +56,7 @@ export function createCodeMirror<ContainerElement extends Element>(
       currentView.destroy()
     }
     currentView = view
-    publishViewUpdate()
+    publishViewChange()
   }
 
   const getView: GetView = () => currentView
@@ -65,7 +65,7 @@ export function createCodeMirror<ContainerElement extends Element>(
   const getServerView: GetView = () => undefined
 
   const useView: UseViewHook = () => {
-    const view = useSyncExternalStore(subscribeViewUpdate, getView, getServerView)
+    const view = useSyncExternalStore(subscribeViewChange, getView, getServerView)
     useDebugValue(view)
     return view
   }
