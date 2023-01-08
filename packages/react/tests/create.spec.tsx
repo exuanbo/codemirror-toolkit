@@ -169,6 +169,7 @@ describe('createCodeMirror', () => {
       fireEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith('view is not ready')
+      expect(screen.queryByText('hello')).not.toBeInTheDocument()
       vi.runAllTimers()
       fireEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
