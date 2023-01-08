@@ -8,7 +8,7 @@
       "@codemirror-toolkit/extensions": ["./packages/extensions/src"]
     }
   },
-  "files": [],
+  "include": [],
   "references": [
     { "path": "./packages/react" },
     { "path": "./packages/utils" },
