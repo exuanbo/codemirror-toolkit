@@ -1,8 +1,9 @@
-import { act, cleanup, render, renderHook, screen } from '@testing-library/react'
-import { useEffect } from 'react'
+import { act, cleanup, fireEvent, render, renderHook, screen } from '@testing-library/react'
+import { useCallback, useEffect } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { createCodeMirror } from '../src/create.js'
+import { noop } from './test-utils.js'
 
 describe('createCodeMirror', () => {
   describe('without component', () => {
@@ -26,17 +27,17 @@ describe('createCodeMirror', () => {
     })
 
     test('debounce', () => {
-      const requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame')
+      vi.spyOn(window, 'requestAnimationFrame')
       const { getView, useContainerRef } = createCodeMirror()
       const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
       const containerRef = renderUseContainerRefResult.current
       const containerElement = document.createElement('div')
       containerRef.current = containerElement
-      expect(requestAnimationFrameSpy).toHaveBeenCalledTimes(1)
+      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1)
       containerRef.current = containerElement
-      expect(requestAnimationFrameSpy).toHaveBeenCalledTimes(1)
+      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1)
       containerRef.current = null
-      expect(requestAnimationFrameSpy).toHaveBeenCalledTimes(2)
+      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2)
       vi.runAllTimers()
       expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeUndefined()
@@ -144,29 +145,33 @@ describe('createCodeMirror', () => {
     })
 
     test('useViewDispatch hook', () => {
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => void 0)
+      vi.spyOn(console, 'error').mockImplementation(noop)
       const { useContainerRef, useViewDispatch } = createCodeMirror<HTMLDivElement>()
       function App() {
         const containerRef = useContainerRef()
-        const viewDispatch = useViewDispatch(() => {
-          console.error('view is not ready')
-        })
-        useEffect(() => {
+        const viewDispatch = useViewDispatch(() => console.error('view is not ready'))
+        const handleClick = useCallback(() => {
           viewDispatch({
             changes: {
               from: 0,
               insert: 'hello',
             },
           })
-        })
-        return <div ref={containerRef} />
+        }, [viewDispatch])
+        return (
+          <>
+            <div ref={containerRef} />
+            <button onClick={handleClick}>click</button>
+          </>
+        )
       }
-      const { rerender } = render(<App />)
+      render(<App />)
+      fireEvent.click(screen.getByText('click'))
+      expect(console.error).toHaveBeenCalledTimes(1)
+      expect(console.error).toHaveBeenCalledWith('view is not ready')
       vi.runAllTimers()
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith('view is not ready')
-      expect(screen.queryByText('hello')).not.toBeInTheDocument()
-      rerender(<App />)
+      fireEvent.click(screen.getByText('click'))
+      expect(console.error).toHaveBeenCalledTimes(1)
       expect(screen.getByText('hello')).toBeInTheDocument()
     })
   })
