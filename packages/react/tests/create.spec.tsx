@@ -85,11 +85,11 @@ describe('createCodeMirror', () => {
 
     test('mount and unmount', () => {
       const { getView, useContainerRef } = createCodeMirror<HTMLDivElement>()
-      function App() {
+      function TestComponent() {
         const containerRef = useContainerRef()
         return <div ref={containerRef} />
       }
-      const { unmount } = render(<App />)
+      const { unmount } = render(<TestComponent />)
       expect(getView()).toBeUndefined()
       expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
       vi.runAllTimers()
@@ -103,7 +103,7 @@ describe('createCodeMirror', () => {
 
     test('useView hook', () => {
       const { useContainerRef, useView } = createCodeMirror<HTMLDivElement>()
-      function App() {
+      function TestComponent() {
         const containerRef = useContainerRef()
         const view = useView()
         useEffect(() => {
@@ -116,7 +116,7 @@ describe('createCodeMirror', () => {
         }, [view])
         return <div ref={containerRef} />
       }
-      render(<App />)
+      render(<TestComponent />)
       act(() => {
         vi.runAllTimers()
       })
@@ -125,7 +125,7 @@ describe('createCodeMirror', () => {
 
     test('useViewEffect hook', () => {
       const { useContainerRef, useViewEffect } = createCodeMirror<HTMLDivElement>()
-      function App() {
+      function TestComponent() {
         const containerRef = useContainerRef()
         useViewEffect((view) => {
           view.dispatch({
@@ -137,7 +137,7 @@ describe('createCodeMirror', () => {
         }, [])
         return <div ref={containerRef} />
       }
-      render(<App />)
+      render(<TestComponent />)
       act(() => {
         vi.runAllTimers()
       })
@@ -147,7 +147,7 @@ describe('createCodeMirror', () => {
     test('useViewDispatch hook', () => {
       vi.spyOn(console, 'error').mockImplementation(noop)
       const { useContainerRef, useViewDispatch } = createCodeMirror<HTMLDivElement>()
-      function App() {
+      function TestComponent() {
         const containerRef = useContainerRef()
         const viewDispatch = useViewDispatch(() => console.error('view is not ready'))
         const handleClick = useCallback(() => {
@@ -165,7 +165,7 @@ describe('createCodeMirror', () => {
           </>
         )
       }
-      render(<App />)
+      render(<TestComponent />)
       fireEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith('view is not ready')

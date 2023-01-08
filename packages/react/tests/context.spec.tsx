@@ -25,8 +25,13 @@ describe('createCodeMirrorWithContext', () => {
   test('hooks from context', () => {
     vi.spyOn(console, 'log').mockImplementation(noop)
     vi.spyOn(console, 'error').mockImplementation(noop)
-    const { Provider, useContainerRef, useView, useViewEffect, useViewDispatch } =
-      createCodeMirrorWithContext<HTMLDivElement>()
+    const {
+      Provider: CodeMirrorProvider,
+      useContainerRef,
+      useView,
+      useViewEffect,
+      useViewDispatch,
+    } = createCodeMirrorWithContext<HTMLDivElement>()
     function TestComponent() {
       const containerRef = useContainerRef()
       const view = useView()
@@ -54,12 +59,13 @@ describe('createCodeMirrorWithContext', () => {
         </>
       )
     }
-    render(<TestComponent />, { wrapper: Provider })
+    render(<TestComponent />, { wrapper: CodeMirrorProvider })
     expect(console.log).toHaveBeenCalledTimes(1)
     expect(console.log).toHaveBeenNthCalledWith(1, 'view is not ready')
     fireEvent.click(screen.getByText('click'))
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(console.error).toHaveBeenCalledWith('view is not ready')
+    expect(screen.queryByText('hello')).not.toBeInTheDocument()
     act(() => {
       vi.runAllTimers()
     })
