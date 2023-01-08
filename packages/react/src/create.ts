@@ -123,8 +123,9 @@ export function createCodeMirror<ContainerElement extends Element>(
   }
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
-    // The ref object will always be the same after creation
-    // But is this really a good idea, reading an external value during rendering?
+    // Reading an external variable on every render breaks the rules of React, and only works
+    // because the container ref object will always be the same after creation.
+    // `useSyncExternalStore` with a no-op subscription function would achieve the same effect.
     return containerRef ?? (containerRef = createContainerRef())
   }
 
