@@ -8,7 +8,7 @@ const config = {
   extends: [defaultConfig],
   overrides: [
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.?(c|m)ts?(x)'],
       rules: {
         '@typescript-eslint/ban-types': [
           'error',
@@ -26,24 +26,26 @@ const config = {
           },
         ],
         '@typescript-eslint/no-unused-vars': 'off',
-        'react/jsx-sort-props': [
-          'error',
-          {
-            callbacksLast: true,
-            shorthandFirst: true,
-            reservedFirst: true,
-          },
-        ],
-        'react/prop-types': 'off',
-        'react-hooks/exhaustive-deps': [
-          'warn',
-          {
-            additionalHooks: '(useViewEffect)',
-          },
-        ],
       },
     },
   ],
+  rules: {
+    'react/jsx-sort-props': [
+      'error',
+      {
+        callbacksLast: true,
+        shorthandFirst: true,
+        reservedFirst: true,
+      },
+    ],
+    'react/prop-types': 'off',
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      {
+        additionalHooks: '(useViewEffect)',
+      },
+    ],
+  },
 }
 
 module.exports = config

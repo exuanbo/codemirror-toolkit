@@ -16,7 +16,7 @@ const defaultConfig = {
   ],
   overrides: [
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.?(c|m)ts?(x)'],
       extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
