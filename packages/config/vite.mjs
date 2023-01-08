@@ -1,8 +1,8 @@
 // @ts-check
-/** @typedef {import('vite').UserConfig} UserConfig */
+/** @typedef {import('vitest/config').UserConfig} UserConfig */
 /** @typedef {import('rollup').ExternalOption} ExternalOption */
 
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 /**
  * @param {UserConfig} [config]
@@ -25,6 +25,16 @@ export function createViteConfig(config) {
       rollupOptions: {
         ...config?.build?.rollupOptions,
         external: mergeExternalOption([/^@codemirror/], config?.build?.rollupOptions?.external),
+      },
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      ...config?.test,
+      coverage: {
+        enabled: true,
+        reporter: ['text', 'html', 'json'],
+        ...config?.test?.coverage,
       },
     },
   })

@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Module
+    "rootDir": ".",
+    "types": ["node"],
+    // Emit
+    "emitDeclarationOnly": false,
+    "noEmit": true
+  },
+  "include": ["."],
+  "references": [{ "path": ".." }]
+}

@@ -14,11 +14,13 @@
   "main": "dist/index.cjs",
   "sideEffects": false,
   "scripts": {
-    "clean": "run clean:types && run -T rimraf dist",
+    "clean": "run clean:types && run -T rimraf coverage dist",
     "clean:types": "run -T tsc -b --clean",
     "build": "run build:types && run build:bundle",
     "build:types": "run -T tsc -b",
-    "build:bundle": "run -T vite build"
+    "build:bundle": "run -T vite build",
+    "test": "run -T vitest run",
+    "test:watch": "run -T vitest"
   },
   "repository": {
     "type": "git",
@@ -62,6 +64,7 @@
   "devDependencies": {
     "@codemirror/state": "^6.2.0",
     "@codemirror/view": "^6.7.1",
+    "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
     "@types/use-sync-external-store": "^0.0.3",

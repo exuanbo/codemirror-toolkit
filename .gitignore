@@ -15,4 +15,5 @@ node_modules/
 *.tgz
 *.tsbuildinfo
 .eslintcache
+coverage/
 dist/
