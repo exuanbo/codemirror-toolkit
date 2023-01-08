@@ -1,13 +1,17 @@
 # @codemirror-toolkit/react
 
 [![npm (scoped)](https://img.shields.io/npm/v/@codemirror-toolkit/react.svg)](https://www.npmjs.com/package/@codemirror-toolkit/react)
-[![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@codemirror-toolkit/react.svg)](https://bundlephobia.com/package/@codemirror-toolkit/react)
+[![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@codemirror-toolkit/react.svg?label=bundle%20size)](https://bundlephobia.com/package/@codemirror-toolkit/react)
+[![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/exuanbo/codemirror-toolkit/test.yml.svg?branch=main)](https://github.com/exuanbo/codemirror-toolkit/actions)
+[![Codecov branch](https://img.shields.io/codecov/c/gh/exuanbo/codemirror-toolkit/main.svg?flag=react&token=3bCICigsEr)](https://app.codecov.io/gh/exuanbo/codemirror-toolkit/tree/main/packages/react/src)
 
 A small and flexible solution for binding [CodeMirror 6](https://codemirror.net/) to React.
 
-Instead of providing ready-to-use components with a big amount of props (like [@uiw/react-codemirror](https://github.com/uiwjs/react-codemirror)), it offers a set of hooks and an _optional_ context provider that can be used to better integrate CodeMirror 6 with React.
+Instead of providing component with a big amount of props and un-tree-shakable dependencies (like [@uiw/react-codemirror](https://github.com/uiwjs/react-codemirror)), it offers a set of hooks and an _optional_ context provider that can be used to better integrate with your components.
 
-[Check out the latest README on GitHub](https://github.com/exuanbo/codemirror-toolkit/tree/main/packages/react#readme)
+## Examples
+
+See [codemirror-toolkit#examples](https://github.com/exuanbo/codemirror-toolkit#examples).
 
 ## Installation
 
@@ -23,7 +27,7 @@ Note that, you also need to install the peer dependencies `@codemirror/state` an
 
 ## Usage
 
-First create an instance with your configuration as an object or a factory function:
+First create an instance with configuration as an object or a factory function:
 
 ```tsx
 import { createCodeMirror } from '@codemirror-toolkit/react'
@@ -114,6 +118,10 @@ function App({ initialInput }: { initialInput: string }) {
 ```
 
 ## API
+
+> 🚧 Documentation is WIP.
+
+There are only two functions exported: `createCodeMirror` and `createCodeMirrorWithContext`.
 
 ### Common Types
 
