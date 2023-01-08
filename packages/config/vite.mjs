@@ -32,7 +32,6 @@ export function createViteConfig(config) {
       environment: 'jsdom',
       ...config?.test,
       coverage: {
-        enabled: true,
         reporter: ['text', 'lcov'],
         ...config?.test?.coverage,
       },

@@ -19,7 +19,7 @@
     "build": "run build:types && run build:bundle",
     "build:types": "run -T tsc -b",
     "build:bundle": "run -T vite build",
-    "test": "run -T vitest run",
+    "test": "run -T vitest run --coverage",
     "test:watch": "run -T vitest"
   },
   "repository": {
