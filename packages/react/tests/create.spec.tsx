@@ -1,9 +1,9 @@
-import { act, cleanup, fireEvent, render, renderHook, screen } from '@testing-library/react'
+import { noop, setupUserEvent } from '@codemirror-toolkit/test-utils'
+import { act, cleanup, render, renderHook, screen } from '@testing-library/react'
 import { useCallback, useEffect } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { createCodeMirror } from '../src/create.js'
-import { noop } from './test-utils.js'
 
 describe('createCodeMirror', () => {
   describe('without component', () => {
@@ -27,11 +27,11 @@ describe('createCodeMirror', () => {
     })
 
     test('debounce', () => {
-      vi.spyOn(window, 'requestAnimationFrame')
       const { getView, useContainerRef } = createCodeMirror()
       const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
       const containerRef = renderUseContainerRefResult.current
       const containerElement = document.createElement('div')
+      vi.spyOn(window, 'requestAnimationFrame')
       containerRef.current = containerElement
       expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1)
       containerRef.current = containerElement
@@ -144,8 +144,7 @@ describe('createCodeMirror', () => {
       expect(screen.getByText('hello')).toBeInTheDocument()
     })
 
-    test('useViewDispatch hook', () => {
-      vi.spyOn(console, 'error').mockImplementation(noop)
+    test('useViewDispatch hook', async () => {
       const { useContainerRef, useViewDispatch } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
         const containerRef = useContainerRef()
@@ -165,13 +164,15 @@ describe('createCodeMirror', () => {
           </>
         )
       }
+      const userEvent = setupUserEvent()
+      vi.spyOn(console, 'error').mockImplementation(noop)
       render(<TestComponent />)
-      fireEvent.click(screen.getByText('click'))
+      await userEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith('view is not ready')
       expect(screen.queryByText('hello')).not.toBeInTheDocument()
       vi.runAllTimers()
-      fireEvent.click(screen.getByText('click'))
+      await userEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
       expect(screen.getByText('hello')).toBeInTheDocument()
     })

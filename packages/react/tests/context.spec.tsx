@@ -1,9 +1,9 @@
-import { act, cleanup, fireEvent, render, renderHook, screen } from '@testing-library/react'
+import { noop, setupUserEvent } from '@codemirror-toolkit/test-utils'
+import { act, cleanup, render, renderHook, screen } from '@testing-library/react'
 import { useCallback, useEffect } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { createCodeMirrorWithContext } from '../src/context.js'
-import { noop } from './test-utils.js'
 
 describe('createCodeMirrorWithContext', () => {
   afterEach(() => {
@@ -22,9 +22,7 @@ describe('createCodeMirrorWithContext', () => {
     expect(() => renderHook(() => useContext(), { wrapper: Provider })).not.toThrow()
   })
 
-  test('hooks from context', () => {
-    vi.spyOn(console, 'log').mockImplementation(noop)
-    vi.spyOn(console, 'error').mockImplementation(noop)
+  test('hooks from context', async () => {
     const {
       Provider: CodeMirrorProvider,
       useContainerRef,
@@ -59,10 +57,13 @@ describe('createCodeMirrorWithContext', () => {
         </>
       )
     }
+    const userEvent = setupUserEvent()
+    vi.spyOn(console, 'log').mockImplementation(noop)
+    vi.spyOn(console, 'error').mockImplementation(noop)
     render(<TestComponent />, { wrapper: CodeMirrorProvider })
     expect(console.log).toHaveBeenCalledTimes(1)
     expect(console.log).toHaveBeenNthCalledWith(1, 'view is not ready')
-    fireEvent.click(screen.getByText('click'))
+    await userEvent.click(screen.getByText('click'))
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(console.error).toHaveBeenCalledWith('view is not ready')
     expect(screen.queryByText('hello')).not.toBeInTheDocument()
@@ -72,7 +73,7 @@ describe('createCodeMirrorWithContext', () => {
     expect(console.log).toHaveBeenCalledTimes(3)
     expect(console.log).toHaveBeenNthCalledWith(2, 'view is ready')
     expect(console.log).toHaveBeenNthCalledWith(3, 'viewEffect')
-    fireEvent.click(screen.getByText('click'))
+    await userEvent.click(screen.getByText('click'))
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(screen.getByText('hello')).toBeInTheDocument()
   })

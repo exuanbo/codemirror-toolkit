@@ -371,7 +371,9 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.3.0
     "@commitlint/config-conventional": ^17.3.0
+    "@testing-library/dom": ^8.19.1
     "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/user-event": ^14.4.3
     "@types/eslint": ^8.4.10
     "@types/prettier": ^2.7.2
     "@typescript-eslint/eslint-plugin": ^5.48.0
@@ -419,6 +421,12 @@ __metadata:
       optional: true
     "@types/react-dom":
       optional: true
+  languageName: unknown
+  linkType: soft
+
+"@codemirror-toolkit/test-utils@workspace:packages/test-utils":
+  version: 0.0.0-use.local
+  resolution: "@codemirror-toolkit/test-utils@workspace:packages/test-utils"
   languageName: unknown
   linkType: soft
 
@@ -1014,7 +1022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.5.0":
+"@testing-library/dom@npm:^8.19.1, @testing-library/dom@npm:^8.5.0":
   version: 8.19.1
   resolution: "@testing-library/dom@npm:8.19.1"
   dependencies:
@@ -1058,6 +1066,15 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
   checksum: 51ec548c1fdb1271089a5c63e0908f0166f2c7fcd9cacd3108ebbe0ce64cb4351812d885892020dc37608418cfb15698514856502b3cab0e5cc58d6cc1bd4a3e
+  languageName: node
+  linkType: hard
+
+"@testing-library/user-event@npm:^14.4.3":
+  version: 14.4.3
+  resolution: "@testing-library/user-event@npm:14.4.3"
+  peerDependencies:
+    "@testing-library/dom": ">=7.21.4"
+  checksum: 852c48ea6db1c9471b18276617c84fec4320771e466cd58339a732ca3fd73ad35e5a43ae14f51af51a8d0a150dcf60fcaab049ef367871207bea8f92c4b8195e
   languageName: node
   linkType: hard
 

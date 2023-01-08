@@ -1,0 +1,8 @@
+{
+  "name": "@codemirror-toolkit/test-utils",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  }
+}
