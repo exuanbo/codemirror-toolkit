@@ -382,6 +382,7 @@ __metadata:
     eslint-plugin-react: ^7.31.11
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-simple-import-sort: ^8.0.0
+    eslint-plugin-testing-library: ^5.9.1
     husky: ^8.0.3
     jsdom: ^21.0.0
     lint-staged: ^13.1.0
@@ -1391,7 +1392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:5.48.0":
+"@typescript-eslint/utils@npm:5.48.0, @typescript-eslint/utils@npm:^5.13.0":
   version: 5.48.0
   resolution: "@typescript-eslint/utils@npm:5.48.0"
   dependencies:
@@ -2727,6 +2728,17 @@ __metadata:
   peerDependencies:
     eslint: ">=5.0.0"
   checksum: d2a92a7d148803ee9ad4f081892a8d03820198c36a0f4f16a97d9f686a714edc9c9a9e51cc79cb0ba1afff76a1fde6a5eae50e9e3754928068227c92a2db5d6b
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-testing-library@npm:^5.9.1":
+  version: 5.9.1
+  resolution: "eslint-plugin-testing-library@npm:5.9.1"
+  dependencies:
+    "@typescript-eslint/utils": ^5.13.0
+  peerDependencies:
+    eslint: ^7.5.0 || ^8.0.0
+  checksum: d09f9486945807e9587d52b6979117bc41b750df741567381a06219671096afb318696a0e0db63e253e150fead40e77ef9653ee00f1dda83fc8920e3b3c47107
   languageName: node
   linkType: hard
 

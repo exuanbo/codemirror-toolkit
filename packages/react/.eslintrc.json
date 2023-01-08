@@ -1,0 +1,8 @@
+{
+  "overrides": [
+    {
+      "files": ["./tests/**/*.?(c|m)[jt]s?(x)"],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
+}
