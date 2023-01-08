@@ -1,0 +1,14 @@
+flags:
+  react:
+    paths:
+      - packages/react/
+
+coverage:
+  status:
+    project:
+      default:
+        flags:
+          - react
+      react:
+        flags:
+          - react
