@@ -22,5 +22,5 @@ jobs:
       - run: yarn test
       - uses: codecov/codecov-action@v3
         with:
-          files: ./packages/react/coverage/coverage-final.json
+          files: ./packages/react/coverage/lcov.info
           flags: react

@@ -33,7 +33,7 @@ export function createViteConfig(config) {
       ...config?.test,
       coverage: {
         enabled: true,
-        reporter: ['text', 'html', 'json'],
+        reporter: ['text', 'lcov'],
         ...config?.test?.coverage,
       },
     },
