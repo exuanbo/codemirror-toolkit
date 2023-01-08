@@ -91,9 +91,7 @@ describe('createCodeMirror', () => {
       const { unmount } = render(<App />)
       expect(getView()).toBeUndefined()
       expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
       expect(getView()).toBeDefined()
       expect(screen.getByRole('textbox')).toBeInTheDocument()
       unmount()
@@ -164,9 +162,7 @@ describe('createCodeMirror', () => {
         return <div ref={containerRef} />
       }
       const { rerender } = render(<App />)
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith('view is not ready')
       expect(screen.queryByText('hello')).not.toBeInTheDocument()
