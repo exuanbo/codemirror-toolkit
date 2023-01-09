@@ -12,9 +12,10 @@
     "lint:ci": "eslint . --cache --cache-location ./node_modules/.cache/eslint/.eslintcache --max-warnings 0",
     "format": "prettier --write --cache .",
     "format:check": "prettier --check --cache .",
-    "clean": "yarn workspaces foreach -p --exclude '@codemirror-toolkit/example-*' run clean",
-    "build": "yarn workspaces foreach -p --exclude '@codemirror-toolkit/example-*' run build",
-    "test": "yarn workspaces foreach -p --exclude '@codemirror-toolkit/example-*' run test"
+    "clean": "run foreach -- run clean",
+    "build": "run foreach -- run build",
+    "test": "run foreach -- run test",
+    "foreach": "yarn workspaces foreach -vp --exclude '@codemirror-toolkit/(monorepo|example-*)'"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
