@@ -95,8 +95,6 @@ export function createCodeMirror<ContainerElement extends Element>(
     )
   }
 
-  let containerRef: ContainerRef<ContainerElement> | undefined
-
   function createContainerRef(): ContainerRef<ContainerElement> {
     const rafScheduler = createRafScheduler()
     let currentContainer: ContainerElement | null = null
@@ -121,6 +119,8 @@ export function createCodeMirror<ContainerElement extends Element>(
       },
     })
   }
+
+  let containerRef: ContainerRef<ContainerElement> | undefined
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
     // Reading an external variable on every render breaks the rules of React, and only works
