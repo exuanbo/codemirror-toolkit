@@ -25,13 +25,12 @@ describe('createCodeMirrorWithContext', () => {
   test('hooks from context', async () => {
     const {
       Provider: CodeMirrorProvider,
-      useContainerRef,
       useView,
       useViewEffect,
       useViewDispatch,
+      useContainerRef,
     } = createCodeMirrorWithContext<HTMLDivElement>()
     function TestComponent() {
-      const containerRef = useContainerRef()
       const view = useView()
       useEffect(() => {
         console.log(view ? 'view is ready' : 'view is not ready')
@@ -50,6 +49,7 @@ describe('createCodeMirrorWithContext', () => {
           },
         })
       }, [viewDispatch])
+      const containerRef = useContainerRef()
       return (
         <>
           <div ref={containerRef} />

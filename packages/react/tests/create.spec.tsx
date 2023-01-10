@@ -102,9 +102,8 @@ describe('createCodeMirror', () => {
     })
 
     test('useView hook', () => {
-      const { useContainerRef, useView } = createCodeMirror<HTMLDivElement>()
+      const { useView, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
-        const containerRef = useContainerRef()
         const view = useView()
         useEffect(() => {
           view?.dispatch({
@@ -114,6 +113,7 @@ describe('createCodeMirror', () => {
             },
           })
         }, [view])
+        const containerRef = useContainerRef()
         return <div ref={containerRef} />
       }
       render(<TestComponent />)
@@ -124,9 +124,8 @@ describe('createCodeMirror', () => {
     })
 
     test('useViewEffect hook', () => {
-      const { useContainerRef, useViewEffect } = createCodeMirror<HTMLDivElement>()
+      const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
-        const containerRef = useContainerRef()
         useViewEffect((view) => {
           view.dispatch({
             changes: {
@@ -135,6 +134,7 @@ describe('createCodeMirror', () => {
             },
           })
         }, [])
+        const containerRef = useContainerRef()
         return <div ref={containerRef} />
       }
       render(<TestComponent />)
@@ -145,9 +145,8 @@ describe('createCodeMirror', () => {
     })
 
     test('useViewDispatch hook', async () => {
-      const { useContainerRef, useViewDispatch } = createCodeMirror<HTMLDivElement>()
+      const { useViewDispatch, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
-        const containerRef = useContainerRef()
         const viewDispatch = useViewDispatch(() => console.error('view is not ready'))
         const handleClick = useCallback(() => {
           viewDispatch({
@@ -157,6 +156,7 @@ describe('createCodeMirror', () => {
             },
           })
         }, [viewDispatch])
+        const containerRef = useContainerRef()
         return (
           <>
             <div ref={containerRef} />
