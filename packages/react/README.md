@@ -81,7 +81,7 @@ function App() {
 
 ### With Context Provider
 
-All the functions and hooks created with `createCodeMirror` don't require a context provider to use in different components, but in some cases you may want to instantiate `EditorView` with props from a component. In this case, you can use `createCodeMirrorWithContext` to create an instance with a context provider:
+All the functions and hooks created with `createCodeMirror` don't require a context provider to use in different components, but in some cases you may want to instantiate `EditorView` with props from a component. In this case, you can use `createCodeMirrorWithContext` to create an instance within a context:
 
 ```tsx
 import { createCodeMirrorWithContext } from '@codemirror-toolkit/react'
@@ -100,7 +100,7 @@ function MenuBar() {
 
 function Editor() {
   const containerRef = useContainerRef()
-  return <div ref={containerRef} className="cm-container" />
+  return <div ref={containerRef} />
 }
 
 function App({ initialInput }: { initialInput: string }) {
