@@ -9,14 +9,18 @@ describe('createCodeMirrorWithContext', () => {
   test('Provider and useContext', () => {
     const { Provider, useContext } = createCodeMirrorWithContext('CodeMirrorContext')
     expect(Provider.displayName).toBe('CodeMirrorContext.Provider')
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(noop)
+    vi.spyOn(console, 'error').mockImplementation(noop)
     expect(() => renderHook(() => useContext())).toThrowError(
       'could not find CodeMirrorContext value; please ensure the component is wrapped in a <Provider>',
     )
     expect(console.error).toHaveBeenCalled()
-    const consoleErrorCalledTimes = consoleErrorSpy.mock.calls.length
+    const getConsoleErrorCalledTimes = () => {
+      const spy = vi.mocked(console.error)
+      return spy.mock.calls.length
+    }
+    const consoleErrorCalledTimes = getConsoleErrorCalledTimes()
     expect(() => renderHook(() => useContext(), { wrapper: Provider })).not.toThrow()
-    expect(consoleErrorSpy.mock.calls.length).toBe(consoleErrorCalledTimes)
+    expect(getConsoleErrorCalledTimes()).toBe(consoleErrorCalledTimes)
   })
 
   test('Provider with config', () => {
