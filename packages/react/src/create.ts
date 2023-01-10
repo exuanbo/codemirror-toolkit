@@ -96,8 +96,8 @@ export function createCodeMirror<ContainerElement extends Element>(
   }
 
   function createContainerRef(): ContainerRef<ContainerElement> {
-    const rafScheduler = createRafScheduler()
     let currentContainer: ContainerElement | null = null
+    const rafScheduler = createRafScheduler()
     return Object.seal({
       get current() {
         return currentContainer
@@ -122,12 +122,20 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   let containerRef: ContainerRef<ContainerElement> | undefined
 
-  const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
-    // Reading an external variable on every render breaks the rules of React, and only works
-    // because the container ref object will always be the same after creation.
-    // `useSyncExternalStore` with a no-op subscription function would achieve the same effect.
+  function getContainerRef() {
     return containerRef ?? (containerRef = createContainerRef())
   }
+
+  // Reading an external variable on every render breaks the rules of React, and only works here
+  // because function `getContainerRef` will always return the same object.
+  // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
+  // See the shim implementation for pre-18 versions at
+  // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShimClient.js
+  // or the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
+  // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
+  // Regardless, if the store never updates, `useSyncExternalStore` only calls the `getSnapshot`
+  // function and returns the result, which is the same as reading the variable directly.
+  const useContainerRef: UseContainerRefHook<ContainerElement> = () => getContainerRef()
 
   return {
     getView,
