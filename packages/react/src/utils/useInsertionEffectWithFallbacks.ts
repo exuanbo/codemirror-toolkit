@@ -8,6 +8,6 @@ const syncFallback: typeof builtInAPI = function (effect) {
   effect()
 }
 
-export const useInsertionEffectWithSyncFallback = isBrowser
-  ? builtInAPI ?? syncFallback
-  : syncFallback
+export const useInsertionEffectWithSyncFallback = !isBrowser
+  ? syncFallback
+  : builtInAPI ?? syncFallback
