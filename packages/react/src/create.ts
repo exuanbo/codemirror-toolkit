@@ -16,7 +16,6 @@ import type {
 } from './types.js'
 import { isFunction } from './utils/isFunction.js'
 import { createRafScheduler } from './utils/rafScheduler.js'
-import { useSyncedRef } from './utils/useSyncedRef.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
@@ -80,20 +79,14 @@ export function createCodeMirror<ContainerElement extends Element>(
     }, [view, ...deps])
   }
 
-  const useViewDispatch: UseViewDispatchHook = (onViewNotReady) => {
-    const viewNotReadyHandlerRef = useSyncedRef(onViewNotReady)
-    return useCallback(
-      (...specs) => {
-        const view = getView()
-        if (!view) {
-          const fn = viewNotReadyHandlerRef.current
-          return fn?.(...specs)
-        }
-        view.dispatch(...specs)
-      },
-      [viewNotReadyHandlerRef],
-    )
-  }
+  const useViewDispatch: UseViewDispatchHook = () =>
+    useCallback((...specs) => {
+      const view = getView()
+      if (!view) {
+        throw new TypeError('Cannot dispatch transaction when EditorView is undefined')
+      }
+      view.dispatch(...specs)
+    }, [])
 
   function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null

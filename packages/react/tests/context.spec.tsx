@@ -38,16 +38,18 @@ describe('createCodeMirrorWithContext', () => {
       useViewEffect(() => {
         console.log('viewEffect')
       }, [])
-      const viewDispatch = useViewDispatch(() => {
-        console.error('view is not ready')
-      })
+      const viewDispatch = useViewDispatch()
       const handleClick = useCallback(() => {
-        viewDispatch({
-          changes: {
-            from: 0,
-            insert: 'hello',
-          },
-        })
+        try {
+          viewDispatch({
+            changes: {
+              from: 0,
+              insert: 'hello',
+            },
+          })
+        } catch {
+          console.error('view is not ready')
+        }
       }, [viewDispatch])
       const containerRef = useContainerRef()
       return (

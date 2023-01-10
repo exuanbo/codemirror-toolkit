@@ -15,9 +15,8 @@ export type ViewEffectCleanup = ReturnType<EffectCallback>
 export type ViewEffectCallback = (view: EditorView) => ViewEffectCleanup
 export type UseViewEffectHook = (effect: ViewEffectCallback, deps: DependencyList) => void
 
-export type ViewDispath = InstanceType<typeof EditorView>['dispatch']
-export type ViewNotReadyHandler = ViewDispath
-export type UseViewDispatchHook = (onViewNotReady?: ViewNotReadyHandler) => ViewDispath
+export type ViewDispath = typeof EditorView.prototype.dispatch
+export type UseViewDispatchHook = () => ViewDispath
 
 export type ContainerRef<ContainerElement extends Element = Element> =
   MutableRefObject<ContainerElement | null>

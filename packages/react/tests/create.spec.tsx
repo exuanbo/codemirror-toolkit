@@ -147,14 +147,18 @@ describe('createCodeMirror', () => {
     test('useViewDispatch hook', async () => {
       const { useViewDispatch, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
-        const viewDispatch = useViewDispatch(() => console.error('view is not ready'))
+        const viewDispatch = useViewDispatch()
         const handleClick = useCallback(() => {
-          viewDispatch({
-            changes: {
-              from: 0,
-              insert: 'hello',
-            },
-          })
+          try {
+            viewDispatch({
+              changes: {
+                from: 0,
+                insert: 'hello',
+              },
+            })
+          } catch {
+            console.error('view is not ready')
+          }
         }, [viewDispatch])
         const containerRef = useContainerRef()
         return (
