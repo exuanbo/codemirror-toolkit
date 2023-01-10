@@ -15,7 +15,7 @@ const readOnlyExtension = EditorState.readOnly.of(true)
 const nonEditableExtension = EditorView.editable.of(false)
 
 const { Provider: CodeMirrorProvider, useContainerRef } =
-  createCodeMirrorWithContext<HTMLDivElement>('CodeMirrorContext')
+  createCodeMirrorWithContext<HTMLDivElement>(import.meta.env.DEV && 'CodeMirrorContext')
 
 function Editor() {
   const containerRef = useContainerRef()
