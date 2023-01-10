@@ -120,22 +120,27 @@ export function createCodeMirror<ContainerElement extends Element>(
     })
   }
 
-  let containerRef: ContainerRef<ContainerElement> | undefined
+  let currentContainerRef: ContainerRef<ContainerElement> | undefined
 
   function getContainerRef() {
-    return containerRef ?? (containerRef = createContainerRef())
+    return currentContainerRef ?? (currentContainerRef = createContainerRef())
   }
 
-  // Reading an external variable on every render breaks the rules of React, and only works here
-  // because function `getContainerRef` will always return the same object.
-  // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
-  // See the shim implementation for pre-18 versions at
-  // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShimClient.js
-  // or the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
-  // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
-  // Regardless, if the store never updates, `useSyncExternalStore` only calls the `getSnapshot`
-  // function and returns the result, which is the same as reading the variable directly.
-  const useContainerRef: UseContainerRefHook<ContainerElement> = () => getContainerRef()
+  const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
+    // Reading an external variable on every render breaks the rules of React, and only works here
+    // because function `getContainerRef` will always return the same object.
+    // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
+    // Check out the shim implementation for pre-18 versions at
+    // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShim.js
+    // or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
+    // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
+    // Regardless, if the store never updates, `useSyncExternalStore` calls the passed function
+    // `getSnapshot` and simply returns the result. Any other actions it performs do not affect the
+    // outcome, which is the same as reading the variable directly.
+    const containerRef = getContainerRef()
+    useDebugValue(containerRef)
+    return containerRef
+  }
 
   return {
     getView,
