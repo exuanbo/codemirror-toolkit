@@ -123,13 +123,13 @@ export function createCodeMirror<ContainerElement extends Element>(
     // Reading an external variable on every render breaks the rules of React, and only works here
     // because function `getContainerRef` will always return the same object.
     // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
-    // Check out the shim implementation for pre-18 versions at
-    // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShim.js
+    // Check out the shim implementations for pre-18 versions at
+    // https://github.com/facebook/react/tree/main/packages/use-sync-external-store/src
     // or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
     // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
-    // Regardless, if the store never updates, `useSyncExternalStore` calls the passed function
-    // `getSnapshot` and simply returns the result. Any other actions it performs do not affect the
-    // outcome, which is the same as reading the variable directly.
+    // Regardless, if the store never updates, during rendering `useSyncExternalStore` calls the
+    // passed function `getSnapshot` and simply returns the result. Any other actions it performs
+    // do not affect the outcome, which is the same as reading the variable directly.
     const containerRef = getContainerRef()
     useDebugValue(containerRef)
     return containerRef
