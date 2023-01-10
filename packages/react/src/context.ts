@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext } from 'react'
+import { createContext, createElement, useContext } from 'react'
 
 import { createCodeMirror } from './create.js'
 import type {
@@ -42,10 +42,10 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
 
   const CodeMirrorProvider: CodeMirrorProvider = ({ config, children }) => {
     const contextValue = useSingleton(() => createCodeMirror<ContainerElement>(config))
-    return (
-      <InternalCodeMirrorContext.Provider value={contextValue}>
-        {children}
-      </InternalCodeMirrorContext.Provider>
+    return /*#__PURE__*/ createElement(
+      InternalCodeMirrorContext.Provider,
+      { value: contextValue },
+      children,
     )
   }
 

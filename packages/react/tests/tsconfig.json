@@ -7,7 +7,9 @@
     "types": ["node"],
     // Emit
     "emitDeclarationOnly": false,
-    "noEmit": true
+    "noEmit": true,
+    // Language and Environment
+    "jsx": "react-jsx"
   },
   "include": ["."],
   "references": [{ "path": ".." }]
