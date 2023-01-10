@@ -185,9 +185,12 @@ interface CodeMirrorProvider {
 type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
   () => CodeMirror<ContainerElement>
 
+type UseGetViewHook = () => GetView
+
 interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
   Provider: CodeMirrorProvider
   useContext: UseCodeMirrorContextHook<ContainerElement>
+  useGetView: UseGetViewHook
   useView: UseViewHook
   useViewEffect: UseViewEffectHook
   useViewDispatch: UseViewDispatchHook

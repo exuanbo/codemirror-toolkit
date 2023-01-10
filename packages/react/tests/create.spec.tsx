@@ -1,7 +1,7 @@
 import { noop, setupUserEvent } from '@codemirror-toolkit/test-utils'
-import { act, cleanup, render, renderHook, screen } from '@testing-library/react'
+import { act, render, renderHook, screen } from '@testing-library/react'
 import { useCallback, useEffect } from 'react'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import { createCodeMirror } from '../src/create.js'
 
@@ -79,10 +79,6 @@ describe('createCodeMirror', () => {
   })
 
   describe('with componet', () => {
-    afterEach(() => {
-      cleanup()
-    })
-
     test('mount and unmount', () => {
       const { getView, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {

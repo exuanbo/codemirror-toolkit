@@ -4,6 +4,7 @@ import { createContext, createElement, useContext } from 'react'
 import { createCodeMirror } from './create.js'
 import type {
   CodeMirror,
+  GetView,
   ProvidedCodeMirrorConfig,
   UseContainerRefHook,
   UseViewDispatchHook,
@@ -26,9 +27,12 @@ export interface CodeMirrorProvider {
 export type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
   () => CodeMirror<ContainerElement>
 
+export type UseGetViewHook = () => GetView
+
 export interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
   Provider: CodeMirrorProvider
   useContext: UseCodeMirrorContextHook<ContainerElement>
+  useGetView: UseGetViewHook
   useView: UseViewHook
   useViewEffect: UseViewEffectHook
   useViewDispatch: UseViewDispatchHook
@@ -65,6 +69,11 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
     return contextValue
   }
 
+  const useGetView: UseGetViewHook = () => {
+    const { getView: getContextView } = useCodeMirrorContext()
+    return getContextView
+  }
+
   const useView: UseViewHook = () => {
     const { useView: useContextView } = useCodeMirrorContext()
     return useContextView()
@@ -88,6 +97,7 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
   return {
     Provider: CodeMirrorProvider,
     useContext: useCodeMirrorContext,
+    useGetView,
     useView,
     useViewEffect,
     useViewDispatch,
