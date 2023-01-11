@@ -14,8 +14,8 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
+import { createCallbackScheduler } from './utils/callbackScheduler.js'
 import { isFunction } from './utils/isFunction.js'
-import { createRafScheduler } from './utils/rafScheduler.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
@@ -90,7 +90,7 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null
-    const rafScheduler = createRafScheduler()
+    const scheduler = createCallbackScheduler()
     return Object.seal({
       get current() {
         return currentContainer
@@ -100,8 +100,8 @@ export function createCodeMirror<ContainerElement extends Element>(
           return
         }
         currentContainer = container
-        rafScheduler.cancel()
-        rafScheduler.request(() =>
+        scheduler.cancel()
+        scheduler.request(() =>
           batch(() => {
             setView(undefined)
             if (container) {

@@ -21,6 +21,8 @@ describe('createCodeMirror', () => {
       const containerRef = renderUseContainerRefResult.current
       const containerElement = document.createElement('div')
       containerRef.current = containerElement
+      expect(containerElement).toBeEmptyDOMElement()
+      expect(getView()).toBeUndefined()
       vi.runAllTimers()
       expect(containerElement).not.toBeEmptyDOMElement()
       expect(getView()).toBeDefined()
@@ -31,13 +33,20 @@ describe('createCodeMirror', () => {
       const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
       const containerRef = renderUseContainerRefResult.current
       const containerElement = document.createElement('div')
-      vi.spyOn(window, 'requestAnimationFrame')
+      vi.spyOn(window, 'setTimeout')
+      vi.spyOn(window, 'clearTimeout')
       containerRef.current = containerElement
-      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1)
+      expect(window.setTimeout).toHaveBeenCalledTimes(1)
       containerRef.current = containerElement
-      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(1)
+      expect(window.clearTimeout).toHaveBeenCalledTimes(0)
+      expect(window.setTimeout).toHaveBeenCalledTimes(1)
+      expect(containerElement).toBeEmptyDOMElement()
+      expect(getView()).toBeUndefined()
       containerRef.current = null
-      expect(window.requestAnimationFrame).toHaveBeenCalledTimes(2)
+      expect(window.clearTimeout).toHaveBeenCalledTimes(1)
+      expect(window.setTimeout).toHaveBeenCalledTimes(2)
+      expect(containerElement).toBeEmptyDOMElement()
+      expect(getView()).toBeUndefined()
       vi.runAllTimers()
       expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeUndefined()
@@ -153,7 +162,7 @@ describe('createCodeMirror', () => {
               },
             })
           } catch {
-            console.error('view is not ready')
+            console.error('view dispatch failed')
           }
         }, [viewDispatch])
         const containerRef = useContainerRef()
@@ -169,7 +178,7 @@ describe('createCodeMirror', () => {
       render(<TestComponent />)
       await userEvent.click(screen.getByText('click'))
       expect(console.error).toHaveBeenCalledTimes(1)
-      expect(console.error).toHaveBeenCalledWith('view is not ready')
+      expect(console.error).toHaveBeenCalledWith('view dispatch failed')
       expect(screen.queryByText('hello')).not.toBeInTheDocument()
       vi.runAllTimers()
       await userEvent.click(screen.getByText('click'))

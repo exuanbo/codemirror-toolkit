@@ -9,6 +9,7 @@ export function noop() {
 export function setupUserEvent(options?: UserEventOptions) {
   return userEvent.setup({
     advanceTimers: (delay) => vi.advanceTimersByTime(delay),
+    delay: null,
     ...options,
   })
 }

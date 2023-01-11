@@ -53,7 +53,7 @@ describe('createCodeMirrorWithContext', () => {
         console.log(view ? 'view is ready' : 'view is not ready')
       }, [view])
       useViewEffect(() => {
-        console.log('viewEffect fired')
+        console.log('view effect fired')
       }, [])
       const viewDispatch = useViewDispatch()
       const handleClick = useCallback(() => {
@@ -94,7 +94,7 @@ describe('createCodeMirrorWithContext', () => {
     })
     expect(console.log).toHaveBeenCalledTimes(4)
     expect(console.log).toHaveBeenNthCalledWith(3, 'view is ready')
-    expect(console.log).toHaveBeenNthCalledWith(4, 'viewEffect fired')
+    expect(console.log).toHaveBeenNthCalledWith(4, 'view effect fired')
     await userEvent.click(screen.getByText('click'))
     expect(console.log).toHaveBeenCalledTimes(5)
     expect(console.log).toHaveBeenNthCalledWith(5, 'current view: ', expect.any(Object))
