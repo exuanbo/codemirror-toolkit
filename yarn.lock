@@ -379,6 +379,7 @@ __metadata:
     "@types/prettier": ^2.7.2
     "@typescript-eslint/eslint-plugin": ^5.48.2
     "@typescript-eslint/parser": ^5.48.2
+    "@typescript/lib-dom": "npm:@types/web@*"
     "@vitest/coverage-c8": ^0.27.1
     eslint: ^8.32.0
     eslint-config-prettier: ^8.6.0
@@ -1421,6 +1422,13 @@ __metadata:
     "@typescript-eslint/types": 5.48.2
     eslint-visitor-keys: ^3.3.0
   checksum: 4d83d1e4b39ad76fe865b0580dbfcad6d6f9e936de3d40c1c13d552d40e394eab390a7f9d1172ba59ce457853b93ed0ec253642e6d07cd6cf4fa0b5ec006f0c4
+  languageName: node
+  linkType: hard
+
+"@typescript/lib-dom@npm:@types/web@*":
+  version: 0.0.88
+  resolution: "@types/web@npm:0.0.88"
+  checksum: 99ca2c4853cfef3e5cd836e83b5fcf3ffcaa5c74f97c3987f65f9abc6e3f59bbe4da9fbfc0658cf1776ac7d163179a5cd5b802ca6ad17763edf9cfbbf112c198
   languageName: node
   linkType: hard
 

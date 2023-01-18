@@ -32,6 +32,7 @@
     "@types/prettier": "^2.7.2",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
+    "@typescript/lib-dom": "npm:@types/web@*",
     "@vitest/coverage-c8": "^0.27.1",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
