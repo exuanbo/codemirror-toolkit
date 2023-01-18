@@ -12,6 +12,7 @@
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
+    "types": [],
 
     // Emit
     "declaration": true,
