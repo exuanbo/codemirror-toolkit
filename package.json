@@ -1,6 +1,6 @@
 {
   "name": "@codemirror-toolkit/monorepo",
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.6.1",
   "engines": {
     "node": ">=16.9.0",
     "yarn": ">=3.3.1"
