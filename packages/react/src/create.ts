@@ -14,7 +14,7 @@ import type {
   UseViewEffectHook,
   UseViewHook,
 } from './types.js'
-import { createCallbackScheduler } from './utils/callbackScheduler.js'
+import { createAsyncScheduler } from './utils/asyncScheduler.js'
 import { isFunction } from './utils/isFunction.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
@@ -90,7 +90,7 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   function createContainerRef(): ContainerRef<ContainerElement> {
     let currentContainer: ContainerElement | null = null
-    const scheduler = createCallbackScheduler()
+    const scheduler = createAsyncScheduler()
     return Object.seal({
       get current() {
         return currentContainer

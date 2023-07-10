@@ -5,12 +5,12 @@ function requestImmediateTimeout(callback: () => void): CancelImmediateTimeout {
   return () => window.clearTimeout(timeoutId)
 }
 
-interface CallbackScheduler {
+interface AsyncScheduler {
   request: (callback: () => void) => void
   cancel: () => void
 }
 
-export function createCallbackScheduler(): CallbackScheduler {
+export function createAsyncScheduler(): AsyncScheduler {
   let cancelTimeout: CancelImmediateTimeout | undefined
   return {
     request: (callback) => {
