@@ -1,0 +1,50 @@
+diff --git a/dist/@testing-library/react.esm.js b/dist/@testing-library/react.esm.js
+index 4fc7a30090ad21a7925cf89e1a9dee435d151adf..9753f0161347051021c4350841387fe126be8fac 100644
+--- a/dist/@testing-library/react.esm.js
++++ b/dist/@testing-library/react.esm.js
+@@ -167,19 +167,7 @@ configure({
+     const previousActEnvironment = getIsReactActEnvironment();
+     setIsReactActEnvironment(false);
+     try {
+-      const result = await cb();
+-      // Drain microtask queue.
+-      // Otherwise we'll restore the previous act() environment, before we resolve the `waitFor` call.
+-      // The caller would have no chance to wrap the in-flight Promises in `act()`
+-      await new Promise(resolve => {
+-        setTimeout(() => {
+-          resolve();
+-        }, 0);
+-        if (jestFakeTimersAreEnabled()) {
+-          jest.advanceTimersByTime(0);
+-        }
+-      });
+-      return result;
++      return await cb();
+     } finally {
+       setIsReactActEnvironment(previousActEnvironment);
+     }
+diff --git a/dist/pure.js b/dist/pure.js
+index 15817c2d88f8e82994bcbf76e2c32c280227fb09..2f1d678307e328a0492115f77a3a1cacc10e3662 100644
+--- a/dist/pure.js
++++ b/dist/pure.js
+@@ -70,19 +70,7 @@ function jestFakeTimersAreEnabled() {
+     const previousActEnvironment = (0, _actCompat.getIsReactActEnvironment)();
+     (0, _actCompat.setReactActEnvironment)(false);
+     try {
+-      const result = await cb();
+-      // Drain microtask queue.
+-      // Otherwise we'll restore the previous act() environment, before we resolve the `waitFor` call.
+-      // The caller would have no chance to wrap the in-flight Promises in `act()`
+-      await new Promise(resolve => {
+-        setTimeout(() => {
+-          resolve();
+-        }, 0);
+-        if (jestFakeTimersAreEnabled()) {
+-          jest.advanceTimersByTime(0);
+-        }
+-      });
+-      return result;
++      return await cb();
+     } finally {
+       (0, _actCompat.setReactActEnvironment)(previousActEnvironment);
+     }
