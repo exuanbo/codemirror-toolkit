@@ -31,13 +31,13 @@ export const ImmutableSetUtils = /*#__PURE__*/ Object.freeze({
     return new Set()
   },
   wrap: <T>(set: Set<T>): ImmutableSetWrapper<T> => {
-    const utils = ImmutableSetUtils
+    const _ = ImmutableSetUtils
     return {
-      add: (value) => utils.wrap(utils.add(set, value)),
-      addMany: (values) => utils.wrap(values.reduce(utils.add, set)),
-      delete: (value) => utils.wrap(utils.delete(set, value)),
-      deleteMany: (values) => utils.wrap(values.reduce(utils.delete, set)),
-      clear: () => utils.wrap(utils.clear(set)),
+      add: (value) => _.wrap(_.add(set, value)),
+      addMany: (values) => _.wrap(values.reduce(_.add, set)),
+      delete: (value) => _.wrap(_.delete(set, value)),
+      deleteMany: (values) => _.wrap(values.reduce(_.delete, set)),
+      clear: () => _.wrap(_.clear(set)),
       unwrap: () => set,
     }
   },
