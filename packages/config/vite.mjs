@@ -33,7 +33,7 @@ export function createViteConfig(config) {
       ...config?.test,
       coverage: {
         reporter: ['text', 'lcov'],
-        ...config?.test?.coverage,
+        .../** @type {object} */ (config?.test?.coverage),
       },
     },
   })
