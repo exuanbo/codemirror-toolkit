@@ -25,8 +25,8 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
         effect.is(ViewUpdateListenerEffect)
           ? mapStateEffectValue(effect, (action) =>
               ImmutableSetUtils.wrap(resultListeners)
-                .addMany(action.add ?? [])
-                .deleteMany(action.remove ?? [])
+                .addMany(action.add)
+                .deleteMany(action.remove)
                 .unwrap(),
             )
           : resultListeners,

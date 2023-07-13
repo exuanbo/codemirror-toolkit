@@ -1,8 +1,8 @@
 export interface ImmutableSetWrapper<T> {
   add: (value: T) => ImmutableSetWrapper<T>
-  addMany: (values: T[]) => ImmutableSetWrapper<T>
+  addMany: (values?: T[]) => ImmutableSetWrapper<T>
   delete: (value: T) => ImmutableSetWrapper<T>
-  deleteMany: (values: T[]) => ImmutableSetWrapper<T>
+  deleteMany: (values?: T[]) => ImmutableSetWrapper<T>
   clear: () => ImmutableSetWrapper<T>
   unwrap: () => Set<T>
 }
@@ -34,9 +34,9 @@ export const ImmutableSetUtils = /*#__PURE__*/ Object.freeze({
     const _ = ImmutableSetUtils
     return {
       add: (value) => _.wrap(_.add(set, value)),
-      addMany: (values) => _.wrap(values.reduce(_.add, set)),
+      addMany: (values = []) => _.wrap(values.reduce(_.add, set)),
       delete: (value) => _.wrap(_.delete(set, value)),
-      deleteMany: (values) => _.wrap(values.reduce(_.delete, set)),
+      deleteMany: (values = []) => _.wrap(values.reduce(_.delete, set)),
       clear: () => _.wrap(_.clear(set)),
       unwrap: () => set,
     }
