@@ -11,18 +11,18 @@ interface AsyncScheduler {
 }
 
 export function createAsyncScheduler(): AsyncScheduler {
-  let cancelTimeout: CancelImmediateTimeout | undefined
+  let cancelTimeout: CancelImmediateTimeout | undefined | null
   return {
     request: (callback) => {
       cancelTimeout = requestImmediateTimeout(() => {
-        cancelTimeout = undefined
+        cancelTimeout = null
         callback()
       })
     },
     cancel: () => {
       if (cancelTimeout) {
         cancelTimeout()
-        cancelTimeout = undefined
+        cancelTimeout = null
       }
     },
   }
