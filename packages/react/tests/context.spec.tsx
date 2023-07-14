@@ -85,7 +85,7 @@ describe('createCodeMirrorWithContext', () => {
     expect(console.log).toHaveBeenNthCalledWith(1, 'view is not ready')
     await userEvent.click(screen.getByText('click'))
     expect(console.log).toHaveBeenCalledTimes(2)
-    expect(console.log).toHaveBeenNthCalledWith(2, 'current view: ', undefined)
+    expect(console.log).toHaveBeenNthCalledWith(2, 'current view: ', null)
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(console.error).toHaveBeenCalledWith('view dispatch failed')
     expect(screen.queryByText('hello')).not.toBeInTheDocument()

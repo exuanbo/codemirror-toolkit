@@ -21,7 +21,7 @@ export function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
 ): CodeMirror<ContainerElement> {
   let prevState: EditorState | undefined
-  let currentView: EditorView | undefined
+  let currentView: EditorView | null = null
 
   function createConfig() {
     return (isFunction(config) ? config : () => config)(prevState)
@@ -46,7 +46,7 @@ export function createCodeMirror<ContainerElement extends Element>(
     viewChangeCallbacks.forEach((callback) => callback())
   }
 
-  function setView(view: EditorView | undefined) {
+  function setView(view: EditorView | null) {
     if (view === currentView) {
       return
     }
@@ -61,7 +61,7 @@ export function createCodeMirror<ContainerElement extends Element>(
   const getView: GetView = () => currentView
 
   // EditorView will never be created on the server
-  const getServerView: GetView = () => undefined
+  const getServerView: GetView = () => null
 
   const useView: UseViewHook = () => {
     const view = useSyncExternalStore(subscribeViewChange, getView, getServerView)
@@ -103,10 +103,8 @@ export function createCodeMirror<ContainerElement extends Element>(
         scheduler.cancel()
         scheduler.request(() =>
           batch(() => {
-            setView(undefined)
-            if (container) {
-              setView(createView(container))
-            }
+            setView(null)
+            setView(container && createView(container))
           }),
         )
       },

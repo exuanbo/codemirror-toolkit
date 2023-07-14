@@ -8,8 +8,8 @@ export interface CodeMirrorConfig extends EditorViewConfigWithoutParentElement {
 export type CodeMirrorConfigCreator = (prevState: EditorState | undefined) => CodeMirrorConfig
 export type ProvidedCodeMirrorConfig = CodeMirrorConfig | CodeMirrorConfigCreator
 
-export type GetView = () => EditorView | undefined
-export type UseViewHook = () => EditorView | undefined
+export type GetView = () => EditorView | null
+export type UseViewHook = () => EditorView | null
 
 export type ViewEffectCleanup = ReturnType<EffectCallback>
 export type ViewEffectCallback = (view: EditorView) => ViewEffectCleanup

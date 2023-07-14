@@ -12,7 +12,7 @@ describe('createCodeMirror', () => {
       const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
       const containerRef = renderUseContainerRefResult.current
       expect(containerRef).toEqual({ current: null })
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
     })
 
     test('create EditorView', () => {
@@ -22,7 +22,7 @@ describe('createCodeMirror', () => {
       const containerElement = document.createElement('div')
       containerRef.current = containerElement
       expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
       vi.runAllTimers()
       expect(containerElement).not.toBeEmptyDOMElement()
       expect(getView()).toBeDefined()
@@ -41,15 +41,15 @@ describe('createCodeMirror', () => {
       expect(window.clearTimeout).toHaveBeenCalledTimes(0)
       expect(window.setTimeout).toHaveBeenCalledTimes(1)
       expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
       containerRef.current = null
       expect(window.clearTimeout).toHaveBeenCalledTimes(1)
       expect(window.setTimeout).toHaveBeenCalledTimes(2)
       expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
       vi.runAllTimers()
       expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
     })
 
     test('destroy EditorView', () => {
@@ -64,7 +64,7 @@ describe('createCodeMirror', () => {
       containerRef.current = null
       vi.runAllTimers()
       expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
     })
 
     test('config factory', () => {
@@ -95,14 +95,14 @@ describe('createCodeMirror', () => {
         return <div ref={containerRef} />
       }
       const { unmount } = render(<TestComponent />)
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
       expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
       vi.runAllTimers()
       expect(getView()).toBeDefined()
       expect(screen.getByRole('textbox')).toBeInTheDocument()
       unmount()
       vi.runAllTimers()
-      expect(getView()).toBeUndefined()
+      expect(getView()).toBeNull()
       expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
     })
 
