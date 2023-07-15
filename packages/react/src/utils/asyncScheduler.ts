@@ -1,6 +1,6 @@
-type CancelImmediateTimeout = () => void
+type CancelTask = () => void
 
-function requestImmediateTimeout(callback: () => void): CancelImmediateTimeout {
+function runTask(callback: () => void): CancelTask {
   const timeoutId = window.setTimeout(callback)
   return () => window.clearTimeout(timeoutId)
 }
@@ -11,18 +11,18 @@ interface AsyncScheduler {
 }
 
 export function createAsyncScheduler(): AsyncScheduler {
-  let cancelTimeout: CancelImmediateTimeout | undefined | null
+  let cancelTask: CancelTask | undefined | null
   return {
     request: (callback) => {
-      cancelTimeout = requestImmediateTimeout(() => {
-        cancelTimeout = null
+      cancelTask = runTask(() => {
+        cancelTask = null
         callback()
       })
     },
     cancel: () => {
-      if (cancelTimeout) {
-        cancelTimeout()
-        cancelTimeout = null
+      if (cancelTask) {
+        cancelTask()
+        cancelTask = null
       }
     },
   }

@@ -60,7 +60,6 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   const getView: GetView = () => currentView
 
-  // EditorView will never be created on the server
   const getServerView: GetView = () => null
 
   const useView: UseViewHook = () => {
