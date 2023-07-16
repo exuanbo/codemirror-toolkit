@@ -2,7 +2,7 @@ import type { Extension } from '@codemirror/state'
 import { StateEffect, StateField } from '@codemirror/state'
 import type { ViewUpdate } from '@codemirror/view'
 import { EditorView } from '@codemirror/view'
-import { ImmutableSetUtils, mapStateEffectValue } from '@codemirror-toolkit/utils'
+import { isEffectOfType, mapEffectValue } from '@codemirror-toolkit/utils'
 
 export type ViewUpdateListener = (update: ViewUpdate) => void
 
@@ -20,26 +20,22 @@ const viewUpdateListenersField = /*#__PURE__*/ StateField.define<ViewUpdateListe
     return new Set()
   },
   update(listeners, transaction) {
-    return transaction.effects.reduce(
-      (resultListeners, effect) =>
-        effect.is(ViewUpdateListenerEffect)
-          ? mapStateEffectValue(effect, (action) =>
-              ImmutableSetUtils.wrap(resultListeners)
-                .addMany(action.add)
-                .deleteMany(action.remove)
-                .unwrap(),
-            )
-          : resultListeners,
-      listeners,
+    transaction.effects.filter(isEffectOfType(ViewUpdateListenerEffect)).forEach(
+      mapEffectValue((action) => {
+        action.add?.forEach((listener) => listeners.add(listener))
+        action.remove?.forEach((listener) => listeners.delete(listener))
+      }),
     )
+    return listeners
   },
   provide(thisField) {
-    return EditorView.updateListener.compute([thisField], (state) => {
-      const listenerSet = state.field(thisField)
-      return (update) => {
-        listenerSet.forEach((listener) => listener(update))
-      }
-    })
+    return EditorView.updateListener.from(
+      thisField,
+      (listeners) =>
+        function aggregatedListener(update) {
+          listeners.forEach((listener) => listener(update))
+        },
+    )
   },
 })
 

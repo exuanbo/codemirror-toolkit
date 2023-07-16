@@ -1,5 +1,9 @@
-import type { StateEffect } from '@codemirror/state'
+import type { StateEffect, StateEffectType } from '@codemirror/state'
 
-export function mapStateEffectValue<T, R>(effect: StateEffect<T>, fn: (value: T) => R): R {
-  return fn(effect.value)
+export function isEffectOfType<T>(type: StateEffectType<T>) {
+  return (effect: StateEffect<unknown>): effect is StateEffect<T> => effect.is(type)
+}
+
+export function mapEffectValue<T, R>(fn: (value: T) => R) {
+  return (effect: StateEffect<T>) => fn(effect.value)
 }
