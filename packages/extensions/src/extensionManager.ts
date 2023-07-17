@@ -4,7 +4,13 @@ import type { EditorView } from '@codemirror/view'
 
 const ExtensionsCompartment = /*#__PURE__*/ new Compartment()
 
-function updateExtensions(view: EditorView, extensions: Extension[]): void {
+type ExtensionList = readonly Extension[]
+
+function isExtensionList(extension: Extension): extension is ExtensionList {
+  return Array.isArray(extension)
+}
+
+function updateExtensions(view: EditorView, extensions: ExtensionList): void {
   view.dispatch({
     effects: ExtensionsCompartment.reconfigure(extensions),
   })
@@ -40,16 +46,12 @@ function getExtensionSet(state: EditorState): ExtensionSet {
   return extensionSet
 }
 
-function isExtensionArray(extension: Extension): extension is readonly Extension[] {
-  return Array.isArray(extension)
-}
-
-function flattenExtensions(extensions: readonly Extension[], depth: number): readonly Extension[] {
+function flattenExtensions(extensions: ExtensionList, depth: number): ExtensionList {
   if (depth <= 0) {
     return extensions
   }
   return extensions.flatMap((extension) => {
-    if (!isExtensionArray(extension)) {
+    if (!isExtensionList(extension)) {
       return extension
     }
     return flattenExtensions(extension, depth - 1)
