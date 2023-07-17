@@ -1,7 +1,7 @@
 import './App.css'
 
 import { EditorView } from '@codemirror/view'
-import { addViewUpdateListener, viewUpdateListeners } from '@codemirror-toolkit/extensions'
+import { addUpdateListener, updateListeners } from '@codemirror-toolkit/extensions'
 import { createCodeMirror } from '@codemirror-toolkit/react'
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((pre
         border: '1px solid gray',
       },
     }),
-    viewUpdateListeners(),
+    updateListeners(),
   ],
 }))
 
@@ -21,7 +21,7 @@ function Editor() {
   const [letterCount, setLetterCount] = useState<number>()
   useViewEffect((view) => {
     setLetterCount(view.state.doc.length)
-    return addViewUpdateListener(view, (update) => {
+    return addUpdateListener(view, (update) => {
       if (update.docChanged) {
         setLetterCount(update.state.doc.length)
       }
