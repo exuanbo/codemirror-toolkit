@@ -310,7 +310,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/example-react-with-context@workspace:examples/react/with-context"
   dependencies:
-    "@codemirror-toolkit/react": ^0.4.0
+    "@codemirror-toolkit/react": ^0.4.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
     "@types/react": ^18.2.15
@@ -328,7 +328,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-extension-manager@workspace:examples/react/with-extension-manager"
   dependencies:
     "@codemirror-toolkit/extensions": ^0.5.0
-    "@codemirror-toolkit/react": ^0.4.0
+    "@codemirror-toolkit/react": ^0.4.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
     "@types/react": ^18.2.15
@@ -346,7 +346,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-update-listener@workspace:examples/react/with-update-listener"
   dependencies:
     "@codemirror-toolkit/extensions": ^0.5.0
-    "@codemirror-toolkit/react": ^0.4.0
+    "@codemirror-toolkit/react": ^0.4.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
     "@types/react": ^18.2.15
@@ -363,7 +363,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/extensions@workspace:packages/extensions"
   dependencies:
-    "@codemirror-toolkit/utils": ^0.3.0
+    "@codemirror-toolkit/utils": ^0.3.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
   peerDependencies:
@@ -405,7 +405,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/react@^0.4.0, @codemirror-toolkit/react@workspace:packages/react":
+"@codemirror-toolkit/react@^0.4.1, @codemirror-toolkit/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/react@workspace:packages/react"
   dependencies:
@@ -439,7 +439,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/utils@^0.3.0, @codemirror-toolkit/utils@workspace:packages/utils":
+"@codemirror-toolkit/utils@^0.3.1, @codemirror-toolkit/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/utils@workspace:packages/utils"
   dependencies:
