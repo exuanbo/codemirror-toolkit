@@ -1,2 +1,2 @@
 export * from './extensionManager.js'
-export * from './viewUpdateListeners.js'
+export * from './updateListeners.js'
