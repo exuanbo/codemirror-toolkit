@@ -1,0 +1,5 @@
+releases:
+  "@codemirror-toolkit/utils": patch
+
+declined:
+  - "@codemirror-toolkit/extensions"
