@@ -82,7 +82,7 @@ export function createCodeMirror<ContainerElement extends Element>(
     useCallback((...specs) => {
       const view = getView()
       if (!view) {
-        throw new TypeError('Cannot dispatch transaction when EditorView is undefined')
+        throw new TypeError('Cannot dispatch transaction without a view')
       }
       view.dispatch(...specs)
     }, [])
