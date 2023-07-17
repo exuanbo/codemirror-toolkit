@@ -20,7 +20,8 @@
     "clean:types": "run -T tsc -b --clean",
     "build": "run build:types && run build:bundle",
     "build:types": "run -T tsc -b",
-    "build:bundle": "run -T vite build"
+    "build:bundle": "run -T vite build",
+    "build:bundle:watch": "run -T vite build --watch"
   },
   "repository": {
     "type": "git",
