@@ -1,8 +1,9 @@
 type CancelTask = () => void
 
 function runTask(callback: () => void): CancelTask {
-  const timeoutId = window.setTimeout(callback)
-  return () => window.clearTimeout(timeoutId)
+  let task: typeof callback | null = callback
+  queueMicrotask(() => task?.())
+  return () => (task = null)
 }
 
 interface AsyncScheduler {

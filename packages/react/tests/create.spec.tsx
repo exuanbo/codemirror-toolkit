@@ -33,18 +33,17 @@ describe('createCodeMirror', () => {
       const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
       const containerRef = renderUseContainerRefResult.current
       const containerElement = document.createElement('div')
-      vi.spyOn(window, 'setTimeout')
-      vi.spyOn(window, 'clearTimeout')
+      vi.spyOn(window, 'queueMicrotask')
       containerRef.current = containerElement
-      expect(window.setTimeout).toHaveBeenCalledTimes(1)
+      expect(window.queueMicrotask).toHaveBeenCalledTimes(1)
       containerRef.current = containerElement
-      expect(window.clearTimeout).toHaveBeenCalledTimes(0)
-      expect(window.setTimeout).toHaveBeenCalledTimes(1)
+      expect(window.queueMicrotask).toHaveBeenCalledTimes(1)
       expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
       containerRef.current = null
-      expect(window.clearTimeout).toHaveBeenCalledTimes(1)
-      expect(window.setTimeout).toHaveBeenCalledTimes(2)
+      expect(window.queueMicrotask).toHaveBeenCalledTimes(2)
+      containerRef.current = null
+      expect(window.queueMicrotask).toHaveBeenCalledTimes(2)
       expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
       vi.runAllTimers()
