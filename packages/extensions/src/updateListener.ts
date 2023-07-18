@@ -15,7 +15,7 @@ export const UpdateListenerEffect = /*#__PURE__*/ StateEffect.define<UpdateListe
 
 type UpdateListenerSet = Set<UpdateListener>
 
-const updateListenersField = /*#__PURE__*/ StateField.define<UpdateListenerSet>({
+const updateListenerField = /*#__PURE__*/ StateField.define<UpdateListenerSet>({
   create() {
     return new Set()
   },
@@ -39,20 +39,20 @@ const updateListenersField = /*#__PURE__*/ StateField.define<UpdateListenerSet>(
   },
 })
 
-export function updateListeners(...initialListeners: UpdateListener[]): Extension {
-  return updateListenersField.init(() => new Set(initialListeners))
+export function updateListener(...initialListeners: UpdateListener[]): Extension {
+  return updateListenerField.init(() => new Set(initialListeners))
 }
 
-function assertUpdateListenersField(view: EditorView): void {
-  if (!view.state.field(updateListenersField, /* require: */ false)) {
-    throw new Error('updateListeners extension is not enabled')
+function assertUpdateListenerField(view: EditorView): void {
+  if (!view.state.field(updateListenerField, /* require: */ false)) {
+    throw new Error('updateListener extension is not enabled')
   }
 }
 
 export type Unsubscribe = () => void
 
 export function addUpdateListener(view: EditorView, listener: UpdateListener): Unsubscribe {
-  assertUpdateListenersField(view)
+  assertUpdateListenerField(view)
   view.dispatch({
     effects: UpdateListenerEffect.of({ add: [listener] }),
   })
@@ -62,7 +62,7 @@ export function addUpdateListener(view: EditorView, listener: UpdateListener): U
 }
 
 export function removeUpdateListener(view: EditorView, listener: UpdateListener): void {
-  assertUpdateListenersField(view)
+  assertUpdateListenerField(view)
   view.dispatch({
     effects: UpdateListenerEffect.of({ remove: [listener] }),
   })

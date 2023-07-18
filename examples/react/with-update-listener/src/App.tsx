@@ -1,7 +1,7 @@
 import './App.css'
 
 import { EditorView } from '@codemirror/view'
-import { addUpdateListener, updateListeners } from '@codemirror-toolkit/extensions'
+import { addUpdateListener, updateListener } from '@codemirror-toolkit/extensions'
 import { createCodeMirror } from '@codemirror-toolkit/react'
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((pre
         border: '1px solid gray',
       },
     }),
-    updateListeners(),
+    updateListener(),
   ],
 }))
 
