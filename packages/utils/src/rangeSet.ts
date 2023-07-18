@@ -11,11 +11,11 @@ export function rangeSetsEqual(a: AnyRangeSet, b: AnyRangeSet): boolean {
   return RangeSet.eq([b], [a])
 }
 
-export type RangeValueCallback<T extends RangeValue, U> = (value: T, from: number, to: number) => U
+export type RangeMapper<T extends RangeValue, U> = (value: T, from: number, to: number) => U
 
 export function mapRangeSetToArray<T extends RangeValue, U>(
   rangeSet: RangeSet<T>,
-  callbackfn: RangeValueCallback<T, U>,
+  callbackfn: RangeMapper<T, U>,
 ): U[] {
   const values = new Array<U>(rangeSet.size)
   if (values.length) {
@@ -27,7 +27,7 @@ export function mapRangeSetToArray<T extends RangeValue, U>(
   return values
 }
 
-export type RangeValueReduceCallback<T extends RangeValue, U extends {}> = (
+export type RangeReducer<T extends RangeValue, U extends {}> = (
   previousValue: U,
   currentValue: T,
   from: number,
@@ -36,18 +36,18 @@ export type RangeValueReduceCallback<T extends RangeValue, U extends {}> = (
 
 export function reduceRangeSet<T extends RangeValue>(
   rangeSet: RangeSet<T>,
-  callbackfn: RangeValueReduceCallback<T, T>,
+  callbackfn: RangeReducer<T, T>,
 ): T
 
 export function reduceRangeSet<T extends RangeValue, U extends {}>(
   rangeSet: RangeSet<T>,
-  callbackfn: RangeValueReduceCallback<T, U>,
+  callbackfn: RangeReducer<T, U>,
   initialValue: U,
 ): U
 
 export function reduceRangeSet<T extends RangeValue, U extends {}>(
   rangeSet: RangeSet<T>,
-  callbackfn: RangeValueReduceCallback<T, T | U>,
+  callbackfn: RangeReducer<T, T | U>,
   initialValue?: U,
 ): T | U {
   if (!rangeSet.size) {
