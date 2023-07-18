@@ -327,7 +327,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/example-react-with-extension-manager@workspace:examples/react/with-extension-manager"
   dependencies:
-    "@codemirror-toolkit/extensions": ^0.5.0
+    "@codemirror-toolkit/extensions": ^0.6.0
     "@codemirror-toolkit/react": ^0.4.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
@@ -345,7 +345,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/example-react-with-update-listener@workspace:examples/react/with-update-listener"
   dependencies:
-    "@codemirror-toolkit/extensions": ^0.5.0
+    "@codemirror-toolkit/extensions": ^0.6.0
     "@codemirror-toolkit/react": ^0.4.1
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
@@ -359,11 +359,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/extensions@^0.5.0, @codemirror-toolkit/extensions@workspace:packages/extensions":
+"@codemirror-toolkit/extensions@^0.6.0, @codemirror-toolkit/extensions@workspace:packages/extensions":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/extensions@workspace:packages/extensions"
   dependencies:
-    "@codemirror-toolkit/utils": ^0.3.1
+    "@codemirror-toolkit/utils": ^0.4.0
     "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.15.0
   peerDependencies:
@@ -439,7 +439,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/utils@^0.3.1, @codemirror-toolkit/utils@workspace:packages/utils":
+"@codemirror-toolkit/utils@^0.4.0, @codemirror-toolkit/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/utils@workspace:packages/utils"
   dependencies:
