@@ -16,3 +16,10 @@ export function mapEffectValue<T, R>(
     ? (effect: StateEffect<T>) => arg1(effect.value)
     : arg2!(arg1.value)
 }
+
+export function filterEffects<T>(
+  effects: readonly StateEffect<unknown>[],
+  type: StateEffectType<T>,
+): StateEffect<T>[] {
+  return effects.filter(isEffectOfType(type))
+}

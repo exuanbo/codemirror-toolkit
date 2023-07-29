@@ -2,7 +2,7 @@ import type { Extension } from '@codemirror/state'
 import { StateEffect, StateField } from '@codemirror/state'
 import type { ViewUpdate } from '@codemirror/view'
 import { EditorView } from '@codemirror/view'
-import { isEffectOfType, mapEffectValue } from '@codemirror-toolkit/utils'
+import { filterEffects, mapEffectValue } from '@codemirror-toolkit/utils'
 
 export type UpdateListener = (update: ViewUpdate) => void
 
@@ -20,7 +20,7 @@ const updateListenerField = /*#__PURE__*/ StateField.define<UpdateListenerSet>({
     return new Set()
   },
   update(listeners, transaction) {
-    transaction.effects.filter(isEffectOfType(UpdateListenerEffect)).forEach(
+    filterEffects(transaction.effects, UpdateListenerEffect).forEach(
       mapEffectValue((action) => {
         action.add?.forEach((listener) => listeners.add(listener))
         action.remove?.forEach((listener) => listeners.delete(listener))
@@ -29,13 +29,9 @@ const updateListenerField = /*#__PURE__*/ StateField.define<UpdateListenerSet>({
     return listeners
   },
   provide(thisField) {
-    return EditorView.updateListener.from(
-      thisField,
-      (listeners) =>
-        function aggregatedListener(update) {
-          listeners.forEach((listener) => listener(update))
-        },
-    )
+    return EditorView.updateListener.from(thisField, (listeners) => (update) => {
+      listeners.forEach((listener) => listener(update))
+    })
   },
 })
 
