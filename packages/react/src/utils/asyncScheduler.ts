@@ -12,19 +12,9 @@ interface AsyncScheduler {
 }
 
 export function createAsyncScheduler(): AsyncScheduler {
-  let cancelTask: CancelTask | undefined | null
+  let cancelTask: CancelTask | undefined
   return {
-    request: (callback) => {
-      cancelTask = runTask(() => {
-        cancelTask = null
-        callback()
-      })
-    },
-    cancel: () => {
-      if (cancelTask) {
-        cancelTask()
-        cancelTask = null
-      }
-    },
+    request: (callback) => (cancelTask = runTask(callback)),
+    cancel: () => cancelTask?.(),
   }
 }
