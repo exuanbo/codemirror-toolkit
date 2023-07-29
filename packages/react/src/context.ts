@@ -16,7 +16,7 @@ import { useSingleton } from './utils/useSingleton.js'
 
 export interface CodeMirrorProviderProps {
   config?: ProvidedCodeMirrorConfig
-  children: ReactNode
+  children?: ReactNode
 }
 
 export interface CodeMirrorProvider {
