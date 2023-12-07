@@ -1,6 +1,6 @@
 {
   "name": "@codemirror-toolkit/extensions",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "General-purpose extensions for CodeMirror",
   "type": "module",
   "exports": {
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/exuanbo/codemirror-toolkit/tree/main/packages/extensions#readme",
   "dependencies": {
-    "@codemirror-toolkit/utils": "^0.4.1"
+    "@codemirror-toolkit/utils": "^0.4.2"
   },
   "peerDependencies": {
     "@codemirror/state": "^6.0.0",
