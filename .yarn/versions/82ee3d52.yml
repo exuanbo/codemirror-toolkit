@@ -1,0 +1,3 @@
+releases:
+  "@codemirror-toolkit/extensions": patch
+  "@codemirror-toolkit/utils": patch
