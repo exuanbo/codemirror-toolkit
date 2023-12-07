@@ -83,6 +83,7 @@ export function createCodeMirror<ContainerElement extends Element>(
       if (!view) {
         throw new TypeError('Cannot dispatch transaction without a view')
       }
+      // @ts-expect-error: overloaded signature
       view.dispatch(...specs)
     }, [])
 

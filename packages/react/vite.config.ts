@@ -11,5 +11,8 @@ export default createViteConfig({
   },
   test: {
     setupFiles: './tests/setup.ts',
+    coverage: {
+      all: false,
+    },
   },
 })

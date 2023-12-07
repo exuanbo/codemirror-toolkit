@@ -10,7 +10,7 @@
 
     // Modules
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "types": [],
 
