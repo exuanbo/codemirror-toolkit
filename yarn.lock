@@ -414,7 +414,6 @@ __metadata:
     "@testing-library/react": ^14.0.0
     "@types/react": ^18.2.17
     "@types/react-dom": ^18.2.7
-    "@types/use-sync-external-store": ^0.0.3
     react: ^18.2.0
     react-dom: ^18.2.0
   peerDependencies:
@@ -1331,13 +1330,6 @@ __metadata:
   dependencies:
     "@types/jest": "*"
   checksum: d364494fc2545316292e88861146146af1e3818792ca63b62a63758b2f737669b687f4aaddfcfbcb7d0e1ed7890a9bd05de23ff97f277d5e68de574497a9ee72
-  languageName: node
-  linkType: hard
-
-"@types/use-sync-external-store@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/use-sync-external-store@npm:0.0.3"
-  checksum: 161ddb8eec5dbe7279ac971531217e9af6b99f7783213566d2b502e2e2378ea19cf5e5ea4595039d730aa79d3d35c6567d48599f69773a02ffcff1776ec2a44e
   languageName: node
   linkType: hard
 
