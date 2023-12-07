@@ -36,6 +36,9 @@ const updateListenerField = /*#__PURE__*/ StateField.define<UpdateListenerSet>({
 })
 
 export function updateListener(...initialListeners: UpdateListener[]): Extension {
+  if (!initialListeners.length) {
+    return updateListenerField.extension
+  }
   return updateListenerField.init(() => new Set(initialListeners))
 }
 
