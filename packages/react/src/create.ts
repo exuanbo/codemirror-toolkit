@@ -1,8 +1,7 @@
 import type { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-import { useCallback, useDebugValue, useEffect } from 'react'
+import { useCallback, useDebugValue, useEffect, useSyncExternalStore } from 'react'
 import { unstable_batchedUpdates as batch } from 'react-dom'
-import { useSyncExternalStore } from 'use-sync-external-store/shim'
 
 import type {
   CodeMirror,
