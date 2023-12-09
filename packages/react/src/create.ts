@@ -59,6 +59,7 @@ export function createCodeMirror<ContainerElement extends Element>(
 
   const getView: GetView = () => currentView
 
+  /* v8 ignore next */
   const getServerView: GetView = () => null
 
   const useView: UseViewHook = () => {
@@ -121,7 +122,7 @@ export function createCodeMirror<ContainerElement extends Element>(
     // because function `getContainerRef` will always return the same object.
     // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
     // Check out the shim implementations for pre-18 versions at
-    // https://github.com/facebook/react/tree/main/packages/use-sync-external-store/src
+    // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShimClient.js
     // or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
     // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
     // Regardless, if the store never updates, during rendering `useSyncExternalStore` calls the

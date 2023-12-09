@@ -45,10 +45,10 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
   const InternalCodeMirrorContext = createContext<CodeMirror<ContainerElement> | null>(null)
 
   const CodeMirrorProvider: CodeMirrorProvider = ({ config, children }) => {
-    const contextValue = useSingleton(() => createCodeMirror<ContainerElement>(config))
+    const instance = useSingleton(() => createCodeMirror<ContainerElement>(config))
     return /*#__PURE__*/ createElement(
       InternalCodeMirrorContext.Provider,
-      { value: contextValue },
+      { value: instance },
       children,
     )
   }
@@ -60,13 +60,13 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
   }
 
   const useCodeMirrorContext: UseCodeMirrorContextHook<ContainerElement> = () => {
-    const contextValue = useContext(InternalCodeMirrorContext)
-    if (!contextValue) {
+    const instance = useContext(InternalCodeMirrorContext)
+    if (!instance) {
       throw new Error(
-        'could not find CodeMirrorContext value; please ensure the component is wrapped in a <Provider>',
+        'could not find instance from CodeMirrorContext; please ensure the component is wrapped in a <Provider>',
       )
     }
-    return contextValue
+    return instance
   }
 
   const useGetView: UseGetViewHook = () => {
