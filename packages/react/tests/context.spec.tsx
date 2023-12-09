@@ -11,7 +11,7 @@ describe('createCodeMirrorWithContext', () => {
     expect(Provider.displayName).toBe('CodeMirrorContext.Provider')
     vi.spyOn(console, 'error').mockImplementation(noop)
     expect(() => renderHook(() => useContext())).toThrowError(
-      'could not find CodeMirrorContext value; please ensure the component is wrapped in a <Provider>',
+      'could not find instance from CodeMirrorContext; please ensure the component is wrapped in a <Provider>',
     )
     expect(console.error).toHaveBeenCalled()
     const getConsoleErrorCalledTimes = () => {
