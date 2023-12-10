@@ -1,7 +1,6 @@
 import type { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { useCallback, useDebugValue, useEffect, useSyncExternalStore } from 'react'
-import { unstable_batchedUpdates as batch } from 'react-dom'
 
 import type {
   CodeMirror,
@@ -101,12 +100,10 @@ export function createCodeMirror<ContainerElement extends Element>(
         }
         currentContainer = container
         scheduler.cancel()
-        scheduler.request(() =>
-          batch(() => {
-            setView(null)
-            setView(container && createView(container))
-          }),
-        )
+        scheduler.request(() => {
+          setView(null)
+          setView(container && createView(container))
+        })
       },
     })
   }
@@ -121,9 +118,8 @@ export function createCodeMirror<ContainerElement extends Element>(
     // Reading an external variable on every render breaks the rules of React, and only works here
     // because function `getContainerRef` will always return the same object.
     // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
-    // Check out the shim implementations for pre-18 versions at
-    // https://github.com/facebook/react/blob/main/packages/use-sync-external-store/src/useSyncExternalStoreShimClient.js
-    // or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
+    // Check out the shim implementations for pre-18 versions in the `use-sync-external-store`
+    // package or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
     // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
     // Regardless, if the store never updates, during rendering `useSyncExternalStore` calls the
     // passed function `getSnapshot` and simply returns the result. Any other actions it performs
