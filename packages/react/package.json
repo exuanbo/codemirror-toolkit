@@ -1,6 +1,6 @@
 {
   "name": "@codemirror-toolkit/react",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A small and flexible solution for binding CodeMirror 6 to React",
   "type": "module",
   "exports": {

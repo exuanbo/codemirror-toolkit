@@ -1,6 +1,6 @@
 {
   "name": "@codemirror-toolkit/utils",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Utilities for CodeMirror",
   "type": "module",
   "exports": {
