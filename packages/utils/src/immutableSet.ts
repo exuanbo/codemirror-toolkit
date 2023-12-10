@@ -12,17 +12,17 @@ export const ImmutableSetUtils = /*#__PURE__*/ Object.freeze({
     if (set.has(value)) {
       return set
     }
-    const newSet = new Set(set)
-    newSet.add(value)
-    return newSet
+    const result = new Set(set)
+    result.add(value)
+    return result
   },
   delete: <T>(set: Set<T>, value: T): Set<T> => {
     if (!set.has(value)) {
       return set
     }
-    const newSet = new Set(set)
-    newSet.delete(value)
-    return newSet
+    const result = new Set(set)
+    result.delete(value)
+    return result
   },
   clear: <T>(set: Set<T>): Set<T> => {
     if (!set.size) {

@@ -1,6 +1,6 @@
 import type { StateEffect, StateEffectType } from '@codemirror/state'
 
-export function isEffectOfType<T>(type: StateEffectType<T>) {
+export function matchEffect<T>(type: StateEffectType<T>) {
   return (effect: StateEffect<unknown>): effect is StateEffect<T> => effect.is(type)
 }
 
@@ -21,5 +21,5 @@ export function filterEffects<T>(
   effects: readonly StateEffect<unknown>[],
   type: StateEffectType<T>,
 ): StateEffect<T>[] {
-  return effects.filter(isEffectOfType(type))
+  return effects.filter(matchEffect(type))
 }
