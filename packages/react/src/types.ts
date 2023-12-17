@@ -11,8 +11,8 @@ export type ProvidedCodeMirrorConfig = CodeMirrorConfig | CodeMirrorConfigCreato
 export type GetView = () => EditorView | null
 export type UseViewHook = () => EditorView | null
 
-export type ViewEffectCleanup = ReturnType<EffectCallback>
-export type ViewEffectCallback = (view: EditorView) => ViewEffectCleanup
+export type ViewEffectDestructor = ReturnType<EffectCallback>
+export type ViewEffectCallback = (view: EditorView) => ViewEffectDestructor
 export type UseViewEffectHook = (effect: ViewEffectCallback, deps: DependencyList) => void
 
 export type ViewDispath = typeof EditorView.prototype.dispatch

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { FunctionComponent, PropsWithChildren } from 'react'
 import { createContext, createElement, useContext } from 'react'
 
 import { createCodeMirror } from './create.js'
@@ -14,15 +14,13 @@ import type {
 import { toPascalCase } from './utils/toPascalCase.js'
 import { useSingleton } from './utils/useSingleton.js'
 
-export interface CodeMirrorProviderProps {
+export interface CodeMirrorProps {
   config?: ProvidedCodeMirrorConfig
-  children?: ReactNode
 }
 
-export interface CodeMirrorProvider {
-  (props: CodeMirrorProviderProps): JSX.Element
-  displayName?: string
-}
+export interface CodeMirrorProviderProps extends PropsWithChildren<CodeMirrorProps> {}
+
+export interface CodeMirrorProvider extends FunctionComponent<CodeMirrorProviderProps> {}
 
 export type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
   () => CodeMirror<ContainerElement>
