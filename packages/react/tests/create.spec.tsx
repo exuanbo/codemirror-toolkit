@@ -131,21 +131,39 @@ describe('createCodeMirror', () => {
       const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>()
       function TestComponent() {
         useViewEffect((view) => {
+          console.log('effect created')
           view.dispatch({
             changes: {
               from: 0,
               insert: 'hello',
             },
           })
+          return () => {
+            console.log('effect destroyed')
+          }
         }, [])
         const containerRef = useContainerRef()
         return <div ref={containerRef} />
       }
-      render(<TestComponent />)
+      vi.spyOn(console, 'log').mockImplementation(noop)
+      const { rerender, unmount } = render(<TestComponent />)
       act(() => {
         vi.runAllTimers()
       })
+      expect(console.log).toHaveBeenCalledTimes(1)
+      expect(console.log).toHaveBeenCalledWith('effect created')
       expect(screen.getByText('hello')).toBeInTheDocument()
+      rerender(<TestComponent />)
+      act(() => {
+        vi.runAllTimers()
+      })
+      expect(console.log).toHaveBeenCalledTimes(1)
+      unmount()
+      act(() => {
+        vi.runAllTimers()
+      })
+      expect(console.log).toHaveBeenCalledTimes(2)
+      expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
     })
 
     test('useViewDispatch hook', async () => {
