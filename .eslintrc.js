@@ -39,12 +39,6 @@ const config = {
       },
     ],
     'react/prop-types': 'off',
-    'react-hooks/exhaustive-deps': [
-      'warn',
-      {
-        additionalHooks: '(useViewEffect)',
-      },
-    ],
   },
 }
 
