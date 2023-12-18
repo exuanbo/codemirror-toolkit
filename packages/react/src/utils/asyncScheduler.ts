@@ -1,6 +1,6 @@
 type CancelTask = () => void
 
-function runTask(callback: () => void): CancelTask {
+function queueTask(callback: () => void): CancelTask {
   let task: typeof callback | null = callback
   queueMicrotask(() => task?.())
   return () => (task = null)
@@ -14,7 +14,7 @@ interface AsyncScheduler {
 export function createAsyncScheduler(): AsyncScheduler {
   let cancelTask: CancelTask | undefined
   return {
-    request: (callback) => (cancelTask = runTask(callback)),
+    request: (callback) => (cancelTask = queueTask(callback)),
     cancel: () => cancelTask?.(),
   }
 }
