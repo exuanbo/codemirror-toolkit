@@ -29,7 +29,7 @@ Note that, you also need to install the peer dependencies `@codemirror/state` an
 
 First create an instance with configuration as an object or a factory function:
 
-```tsx
+```ts
 import { createCodeMirror } from '@codemirror-toolkit/react'
 
 const codeMirror = createCodeMirror<HTMLDivElement>((prevState) => ({
@@ -55,10 +55,11 @@ function App() {
   useViewEffect((view) => {
     console.log('EditorView is created')
     return () => {
-      console.log('EditorView will be destroyed')
+      console.log('EditorView is destroyed')
+      // expect(view.dom.parentElement).toBeNull()
       setLastInput(view.state.doc.toString())
     }
-  }, [])
+  })
   return (
     <>
       <button onClick={() => setShowEditor(!showEditor)}>
@@ -128,7 +129,7 @@ There are only two functions exported: `createCodeMirror` and `createCodeMirrorW
 ```ts
 import type { EditorState } from '@codemirror/state'
 import type { EditorView, EditorViewConfig } from '@codemirror/view'
-import type { DependencyList, EffectCallback, MutableRefObject } from 'react'
+import type { EffectCallback, MutableRefObject } from 'react'
 
 type EditorViewConfigWithoutParentElement = Omit<EditorViewConfig, 'parent'>
 interface CodeMirrorConfig extends EditorViewConfigWithoutParentElement {}
@@ -140,8 +141,8 @@ type GetView = () => EditorView | null
 type UseViewHook = () => EditorView | null
 
 type ViewEffectCleanup = ReturnType<EffectCallback>
-type ViewEffectCallback = (view: EditorView) => ViewEffectCleanup
-type UseViewEffectHook = (effect: ViewEffectCallback, deps: DependencyList) => void
+type ViewEffectSetup = (view: EditorView) => ViewEffectCleanup
+type UseViewEffectHook = (setup: ViewEffectSetup) => void
 
 type ViewDispath = typeof EditorView.prototype.dispatch
 type UseViewDispatchHook = () => ViewDispath
@@ -171,16 +172,13 @@ function createCodeMirror<ContainerElement extends Element>(
 ### `createCodeMirrorWithContext`
 
 ```ts
-import type { ReactNode } from 'react'
+import type { FunctionComponent, PropsWithChildren } from 'react'
 
-interface CodeMirrorProviderProps {
+interface CodeMirrorProps {
   config?: ProvidedCodeMirrorConfig
-  children: ReactNode
 }
-interface CodeMirrorProvider {
-  (props: CodeMirrorProviderProps): JSX.Element
-  displayName?: string
-}
+interface CodeMirrorProviderProps extends PropsWithChildren<CodeMirrorProps> {}
+interface CodeMirrorProvider extends FunctionComponent<CodeMirrorProviderProps> {}
 
 type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
   () => CodeMirror<ContainerElement>
