@@ -1,9 +1,8 @@
 {
   "name": "@codemirror-toolkit/monorepo",
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "yarn@4.0.2",
   "engines": {
-    "node": ">=16.9.0",
-    "yarn": ">=3.6.1"
+    "node": ">=16.9.0"
   },
   "private": true,
   "workspaces": [
@@ -19,7 +18,7 @@
     "clean": "run foreach -- run clean",
     "build": "run foreach -- run build",
     "test": "run foreach -- run test",
-    "foreach": "yarn workspaces foreach -vp --exclude '@codemirror-toolkit/(monorepo|example-*)'"
+    "foreach": "yarn workspaces foreach -Apv --exclude '@codemirror-toolkit/(monorepo|example-*)'"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
