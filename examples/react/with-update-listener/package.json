@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@codemirror-toolkit/extensions": "^0.6.3",
-    "@codemirror-toolkit/react": "^0.5.1",
+    "@codemirror-toolkit/react": "^0.6.0",
     "@codemirror/state": "^6.3.3",
     "@codemirror/view": "^6.22.3",
     "react": "^18.2.0",
