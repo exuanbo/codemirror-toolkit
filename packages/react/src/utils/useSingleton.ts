@@ -1,12 +1,9 @@
 import { useRef } from 'react'
 
-import { isFunction } from './isFunction.js'
-
-export function useSingleton<T extends {}>(instance: T | (() => T)): T {
+export function useSingleton<T extends {}>(createInstance: () => T): T {
   const instanceRef = useRef<T | null>(null)
   if (instanceRef.current == null) {
-    // https://github.com/microsoft/TypeScript/issues/37663
-    instanceRef.current = isFunction(instance) ? instance() : instance
+    instanceRef.current = createInstance()
   }
   return instanceRef.current
 }
