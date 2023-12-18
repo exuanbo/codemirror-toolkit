@@ -49,12 +49,12 @@ describe('createCodeMirrorWithContext', () => {
     function TestComponent() {
       const getView = useGetView()
       const view = useView()
+      useViewEffect(() => {
+        console.log('view effect fired')
+      })
       useEffect(() => {
         console.log(view ? 'view is ready' : 'view is not ready')
       }, [view])
-      useViewEffect(() => {
-        console.log('view effect fired')
-      }, [])
       const viewDispatch = useViewDispatch()
       const handleClick = useCallback(() => {
         console.log('current view: ', getView())
@@ -93,8 +93,8 @@ describe('createCodeMirrorWithContext', () => {
       vi.runAllTimers()
     })
     expect(console.log).toHaveBeenCalledTimes(4)
-    expect(console.log).toHaveBeenNthCalledWith(3, 'view is ready')
-    expect(console.log).toHaveBeenNthCalledWith(4, 'view effect fired')
+    expect(console.log).toHaveBeenNthCalledWith(3, 'view effect fired')
+    expect(console.log).toHaveBeenNthCalledWith(4, 'view is ready')
     await userEvent.click(screen.getByText('click'))
     expect(console.log).toHaveBeenCalledTimes(5)
     expect(console.log).toHaveBeenNthCalledWith(5, 'current view: ', expect.any(Object))

@@ -77,9 +77,9 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
     return useContextView()
   }
 
-  const useViewEffect: UseViewEffectHook = (effect, deps) => {
+  const useViewEffect: UseViewEffectHook = (setup) => {
     const { useViewEffect: useContextViewEffect } = useCodeMirrorContext()
-    return useContextViewEffect(effect, deps)
+    return useContextViewEffect(setup)
   }
 
   const useViewDispatch: UseViewDispatchHook = () => {

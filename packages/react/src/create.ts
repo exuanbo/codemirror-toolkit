@@ -14,6 +14,7 @@ import type {
 } from './types.js'
 import { createAsyncScheduler } from './utils/asyncScheduler.js'
 import { isFunction } from './utils/isFunction.js'
+import { useEffectEvent } from './utils/useEffectEventShim.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
   config?: ProvidedCodeMirrorConfig,
@@ -35,7 +36,8 @@ export function createCodeMirror<ContainerElement extends Element>(
   type ViewChangeCallback = () => void
   const viewChangeCallbacks = new Set<ViewChangeCallback>()
 
-  function subscribeViewChange(callback: ViewChangeCallback) {
+  type UnsubscribeViewChange = () => void
+  function subscribeViewChange(callback: ViewChangeCallback): UnsubscribeViewChange {
     viewChangeCallbacks.add(callback)
     return () => viewChangeCallbacks.delete(callback)
   }
@@ -67,14 +69,19 @@ export function createCodeMirror<ContainerElement extends Element>(
     return view
   }
 
-  const useViewEffect: UseViewEffectHook = (effect, deps) => {
-    const view = useView()
+  const useViewEffect: UseViewEffectHook = (setup) => {
+    const setupEvent = useEffectEvent((view: EditorView | null) => view && setup(view))
     useEffect(() => {
-      if (view) {
-        return effect(view)
+      let cleanup = setupEvent(getView())
+      const unsubscribe = subscribeViewChange(() => {
+        cleanup?.()
+        cleanup = setupEvent(getView())
+      })
+      return () => {
+        unsubscribe()
+        cleanup?.()
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [view, ...deps])
+    }, [setupEvent])
   }
 
   const useViewDispatch: UseViewDispatchHook = () =>
@@ -115,15 +122,6 @@ export function createCodeMirror<ContainerElement extends Element>(
   }
 
   const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
-    // Reading an external variable on every render breaks the rules of React, and only works here
-    // because function `getContainerRef` will always return the same object.
-    // Using `useSyncExternalStore` with a no-op subscription function would have the same effect.
-    // Check out the shim implementations for pre-18 versions in the `use-sync-external-store`
-    // package or find the functions `mountSyncExternalStore` and `updateSyncExternalStore` at
-    // https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiberHooks.js
-    // Regardless, if the store never updates, during rendering `useSyncExternalStore` calls the
-    // passed function `getSnapshot` and simply returns the result. Any other actions it performs
-    // do not affect the outcome, which is the same as reading the variable directly.
     const containerRef = getContainerRef()
     useDebugValue(containerRef)
     return containerRef

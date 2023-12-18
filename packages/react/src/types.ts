@@ -1,6 +1,6 @@
 import type { EditorState } from '@codemirror/state'
 import type { EditorView, EditorViewConfig } from '@codemirror/view'
-import type { DependencyList, EffectCallback, MutableRefObject } from 'react'
+import type { EffectCallback, MutableRefObject } from 'react'
 
 export type EditorViewConfigWithoutParentElement = Omit<EditorViewConfig, 'parent'>
 export interface CodeMirrorConfig extends EditorViewConfigWithoutParentElement {}
@@ -11,9 +11,9 @@ export type ProvidedCodeMirrorConfig = CodeMirrorConfig | CodeMirrorConfigCreato
 export type GetView = () => EditorView | null
 export type UseViewHook = () => EditorView | null
 
-export type ViewEffectDestructor = ReturnType<EffectCallback>
-export type ViewEffectCallback = (view: EditorView) => ViewEffectDestructor
-export type UseViewEffectHook = (effect: ViewEffectCallback, deps: DependencyList) => void
+export type ViewEffectCleanup = ReturnType<EffectCallback>
+export type ViewEffectSetup = (view: EditorView) => ViewEffectCleanup
+export type UseViewEffectHook = (setup: ViewEffectSetup) => void
 
 export type ViewDispath = typeof EditorView.prototype.dispatch
 export type UseViewDispatchHook = () => ViewDispath

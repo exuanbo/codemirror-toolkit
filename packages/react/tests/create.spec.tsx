@@ -1,6 +1,6 @@
 import { noop, setupUserEvent } from '@codemirror-toolkit/test-utils'
 import { act, render, renderHook, screen } from '@testing-library/react'
-import { useCallback, useEffect } from 'react'
+import { PropsWithChildren, useCallback, useEffect } from 'react'
 import { describe, expect, test, vi } from 'vitest'
 
 import { createCodeMirror } from '../src/create.js'
@@ -141,7 +141,7 @@ describe('createCodeMirror', () => {
           return () => {
             console.log('effect destroyed')
           }
-        }, [])
+        })
         const containerRef = useContainerRef()
         return <div ref={containerRef} />
       }
@@ -164,6 +164,53 @@ describe('createCodeMirror', () => {
       })
       expect(console.log).toHaveBeenCalledTimes(2)
       expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
+    })
+
+    test('useViewEffect hook with view created', () => {
+      const { useView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>()
+      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
+      const containerRef = renderUseContainerRefResult.current
+      function TestParentComponent({ children }: PropsWithChildren) {
+        const view = useView()
+        const containerRef = useContainerRef()
+        return (
+          <>
+            <div ref={containerRef} />
+            {view && children}
+          </>
+        )
+      }
+      function TestComponent() {
+        useViewEffect(() => {
+          console.log('effect created')
+          return () => {
+            console.log('effect destroyed')
+          }
+        })
+        return null
+      }
+      vi.spyOn(console, 'log').mockImplementation(noop)
+      const { unmount } = render(
+        <TestParentComponent>
+          <TestComponent />
+        </TestParentComponent>,
+      )
+      act(() => {
+        vi.runAllTimers()
+      })
+      expect(console.log).toHaveBeenCalledTimes(1)
+      expect(console.log).toHaveBeenCalledWith('effect created')
+      containerRef.current = null
+      act(() => {
+        vi.runAllTimers()
+      })
+      expect(console.log).toHaveBeenCalledTimes(2)
+      expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
+      unmount()
+      act(() => {
+        vi.runAllTimers()
+      })
+      expect(console.log).toHaveBeenCalledTimes(2)
     })
 
     test('useViewDispatch hook', async () => {
