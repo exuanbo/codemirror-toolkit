@@ -26,7 +26,7 @@ function Editor() {
         setLetterCount(update.state.doc.length)
       }
     })
-  }, [])
+  })
   const containerRef = useContainerRef()
   return (
     <>

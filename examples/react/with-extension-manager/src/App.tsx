@@ -28,7 +28,7 @@ function Editor() {
   const [isReadOnly, setReadOnly] = useState(false)
   useViewEffect((view) => {
     setReadOnly(view.state.readOnly)
-  }, [])
+  })
   const toggleReadOnly = () => {
     const view = getView()
     if (view) {
