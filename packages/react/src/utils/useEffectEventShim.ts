@@ -5,6 +5,7 @@ const useIsomorphicInsertionEffect = typeof window !== 'undefined' ? useInsertio
 
 export function useEffectEvent<Args extends unknown[], Result>(event: (...args: Args) => Result) {
   const eventRef = useRef<typeof event>(null!)
+
   useIsomorphicInsertionEffect(() => {
     eventRef.current = event
   }, [event])

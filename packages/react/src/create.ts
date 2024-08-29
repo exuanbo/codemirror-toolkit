@@ -13,7 +13,6 @@ import type {
   UseViewHook,
 } from './types.js'
 import { createAsyncScheduler } from './utils/asyncScheduler.js'
-import { isFunction } from './utils/isFunction.js'
 import { useEffectEvent } from './utils/useEffectEventShim.js'
 
 export function createCodeMirror<ContainerElement extends Element>(
@@ -23,7 +22,7 @@ export function createCodeMirror<ContainerElement extends Element>(
   let currentView: EditorView | null = null
 
   function createConfig() {
-    return (isFunction(config) ? config : () => config)(prevState)
+    return (typeof config === 'function' ? config : () => config)(prevState)
   }
 
   function createView(container: ContainerElement) {
