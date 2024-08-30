@@ -84,13 +84,13 @@ export function createCodeMirror<ContainerElement extends Element>(
   }
 
   const useViewDispatch: UseViewDispatchHook = () =>
-    useCallback((...specs) => {
+    useCallback((...transactions) => {
       const view = getView()
       if (!view) {
-        throw new TypeError('Cannot dispatch transaction without a view')
+        throw new ReferenceError('dispatch called before view is initialized')
       }
       // @ts-expect-error: overloaded signature
-      view.dispatch(...specs)
+      view.dispatch(...transactions)
     }, [])
 
   function createContainerRef(): ContainerRef<ContainerElement> {
