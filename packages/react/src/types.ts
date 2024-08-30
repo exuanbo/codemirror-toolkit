@@ -18,10 +18,8 @@ export type UseViewEffectHook = (setup: ViewEffectSetup) => void
 export type ViewDispath = typeof EditorView.prototype.dispatch
 export type UseViewDispatchHook = () => ViewDispath
 
-export type ContainerRef<ContainerElement extends Element = Element> =
-  MutableRefObject<ContainerElement | null>
-export type UseContainerRefHook<ContainerElement extends Element = Element> =
-  () => ContainerRef<ContainerElement>
+export type ContainerRef<Container extends Element = Element> = MutableRefObject<Container | null>
+export type UseContainerRefHook<Container extends Element = Element> = () => ContainerRef<Container>
 
 export interface CodeMirror<ContainerElement extends Element = Element> {
   getView: GetView

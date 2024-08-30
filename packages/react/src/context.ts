@@ -22,28 +22,27 @@ export interface CodeMirrorProviderProps extends PropsWithChildren<CodeMirrorPro
 
 export interface CodeMirrorProvider extends FunctionComponent<CodeMirrorProviderProps> {}
 
-export type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
-  () => CodeMirror<ContainerElement>
+export type UseContextHook<Container extends Element = Element> = () => CodeMirror<Container>
 
 export type UseGetViewHook = () => GetView
 
-export interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
+export interface CodeMirrorWithContext<Container extends Element = Element> {
   Provider: CodeMirrorProvider
-  useContext: UseCodeMirrorContextHook<ContainerElement>
+  useContext: UseContextHook<Container>
   useGetView: UseGetViewHook
   useView: UseViewHook
   useViewEffect: UseViewEffectHook
   useViewDispatch: UseViewDispatchHook
-  useContainerRef: UseContainerRefHook<ContainerElement>
+  useContainerRef: UseContainerRefHook<Container>
 }
 
-export function createCodeMirrorWithContext<ContainerElement extends Element>(
+export function createCodeMirrorWithContext<Container extends Element>(
   displayName?: string | false,
-): CodeMirrorWithContext<ContainerElement> {
-  const InternalCodeMirrorContext = createContext<CodeMirror<ContainerElement> | null>(null)
+): CodeMirrorWithContext<Container> {
+  const InternalCodeMirrorContext = createContext<CodeMirror<Container> | null>(null)
 
   const CodeMirrorProvider: CodeMirrorProvider = ({ config, children }) => {
-    const instance = useSingleton(() => createCodeMirror<ContainerElement>(config))
+    const instance = useSingleton(() => createCodeMirror<Container>(config))
     return /*#__PURE__*/ createElement(
       InternalCodeMirrorContext.Provider,
       { value: instance },
@@ -57,7 +56,7 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
     InternalCodeMirrorContext.displayName = `Internal${displayName}`
   }
 
-  const useCodeMirrorContext: UseCodeMirrorContextHook<ContainerElement> = () => {
+  const useCodeMirrorContext: UseContextHook<Container> = () => {
     const instance = useContext(InternalCodeMirrorContext)
     if (!instance) {
       throw new Error(
@@ -87,7 +86,7 @@ export function createCodeMirrorWithContext<ContainerElement extends Element>(
     return useContextViewDispatch()
   }
 
-  const useContainerRef: UseContainerRefHook<ContainerElement> = () => {
+  const useContainerRef: UseContainerRefHook<Container> = () => {
     const { useContainerRef: useContextContainerRef } = useCodeMirrorContext()
     return useContextContainerRef()
   }
