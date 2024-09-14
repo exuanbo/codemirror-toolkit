@@ -151,6 +151,7 @@ export const {
   useViewEffect,
   setContainer,
   setConfig,
+  subscribe,
 } = cm
 ```
 
