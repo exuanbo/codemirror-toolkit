@@ -267,7 +267,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/example-react-with-context@workspace:examples/react/with-context"
   dependencies:
-    "@codemirror-toolkit/react": "npm:^0.6.0"
+    "@codemirror-toolkit/react": "npm:^0.7.0"
     "@codemirror/state": "npm:^6.4.1"
     "@codemirror/view": "npm:^6.33.0"
     "@types/react": "npm:^18.3.5"
@@ -285,7 +285,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-extension-manager@workspace:examples/react/with-extension-manager"
   dependencies:
     "@codemirror-toolkit/extensions": "npm:^0.6.3"
-    "@codemirror-toolkit/react": "npm:^0.6.0"
+    "@codemirror-toolkit/react": "npm:^0.7.0"
     "@codemirror/state": "npm:^6.4.1"
     "@codemirror/view": "npm:^6.33.0"
     "@types/react": "npm:^18.3.5"
@@ -303,7 +303,7 @@ __metadata:
   resolution: "@codemirror-toolkit/example-react-with-update-listener@workspace:examples/react/with-update-listener"
   dependencies:
     "@codemirror-toolkit/extensions": "npm:^0.6.3"
-    "@codemirror-toolkit/react": "npm:^0.6.0"
+    "@codemirror-toolkit/react": "npm:^0.7.0"
     "@codemirror/state": "npm:^6.4.1"
     "@codemirror/view": "npm:^6.33.0"
     "@types/react": "npm:^18.3.5"
@@ -320,7 +320,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/extensions@workspace:packages/extensions"
   dependencies:
-    "@codemirror-toolkit/utils": "npm:^0.5.0"
+    "@codemirror-toolkit/utils": "npm:^0.5.1"
     "@codemirror/state": "npm:^6.4.1"
     "@codemirror/view": "npm:^6.33.0"
   peerDependencies:
@@ -362,7 +362,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/react@npm:^0.6.0, @codemirror-toolkit/react@workspace:packages/react":
+"@codemirror-toolkit/react@npm:^0.7.0, @codemirror-toolkit/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/react@workspace:packages/react"
   dependencies:
@@ -394,7 +394,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codemirror-toolkit/utils@npm:^0.5.0, @codemirror-toolkit/utils@workspace:packages/utils":
+"@codemirror-toolkit/utils@npm:^0.5.1, @codemirror-toolkit/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@codemirror-toolkit/utils@workspace:packages/utils"
   dependencies:
