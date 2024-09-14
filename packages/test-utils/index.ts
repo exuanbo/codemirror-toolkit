@@ -1,5 +1,4 @@
-import userEvent from '@testing-library/user-event'
-import type { Options as UserEventOptions } from '@testing-library/user-event/options'
+import { type Options as UserEventOptions, userEvent } from '@testing-library/user-event'
 import { vi } from 'vitest'
 
 export function noop() {
@@ -8,7 +7,7 @@ export function noop() {
 
 export function setupUserEvent(options?: UserEventOptions) {
   return userEvent.setup({
-    advanceTimers: (delay) => vi.advanceTimersByTime(delay),
+    advanceTimers: vi.advanceTimersByTime,
     delay: null,
     ...options,
   })

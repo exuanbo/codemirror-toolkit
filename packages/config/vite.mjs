@@ -28,7 +28,6 @@ export function createViteConfig(config) {
       },
     },
     test: {
-      globals: true,
       environment: 'jsdom',
       ...config?.test,
       coverage: {
