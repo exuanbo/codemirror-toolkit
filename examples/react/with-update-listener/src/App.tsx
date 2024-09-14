@@ -2,11 +2,12 @@ import './App.css'
 
 import { EditorView } from '@codemirror/view'
 import { addUpdateListener, updateListener } from '@codemirror-toolkit/extensions'
-import { createCodeMirror } from '@codemirror-toolkit/react'
-import { useState } from 'react'
+import { create, ViewEffectSetup } from '@codemirror-toolkit/react'
+import { useCallback, useState } from 'react'
 
-const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((prevState) => ({
-  doc: prevState?.doc ?? 'Hello World!',
+const { useViewEffect, setContainer } = create((prevState) => ({
+  state: prevState,
+  doc: 'Hello World!',
   extensions: [
     EditorView.theme({
       '&.cm-editor': {
@@ -19,33 +20,25 @@ const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((pre
 
 function Editor() {
   const [letterCount, setLetterCount] = useState<number>()
-  useViewEffect((view) => {
+  const updateLetterCount = useCallback<ViewEffectSetup>((view) => {
     setLetterCount(view.state.doc.length)
     return addUpdateListener(view, (update) => {
       if (update.docChanged) {
         setLetterCount(update.state.doc.length)
       }
     })
-  })
-  const containerRef = useContainerRef()
+  }, [])
+  useViewEffect(updateLetterCount)
   return (
     <>
-      <div ref={containerRef} id="cm-container" />
+      <div ref={setContainer} id="cm-container" />
       {letterCount != null && <div id="letter-count">Letter Count: {letterCount}</div>}
     </>
   )
 }
 
 function App() {
-  const [shouldShowEditor, setShowEditor] = useState(true)
-  return (
-    <>
-      <button onClick={() => setShowEditor(!shouldShowEditor)}>
-        {shouldShowEditor ? 'Destroy' : 'Create'} Editor
-      </button>
-      {shouldShowEditor && <Editor />}
-    </>
-  )
+  return <Editor />
 }
 
 export default App

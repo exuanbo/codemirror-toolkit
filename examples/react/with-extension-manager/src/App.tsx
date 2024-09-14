@@ -1,8 +1,8 @@
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { addExtension, extensionManager, removeExtension } from '@codemirror-toolkit/extensions'
-import { createCodeMirror } from '@codemirror-toolkit/react'
-import { useState } from 'react'
+import { create, ViewEffectSetup } from '@codemirror-toolkit/react'
+import { useCallback, useState } from 'react'
 
 const readOnlyExtension = EditorState.readOnly.of(true)
 const readOnlyThemeExtension = EditorView.theme({
@@ -11,9 +11,9 @@ const readOnlyThemeExtension = EditorView.theme({
   },
 })
 
-// prettier-ignore
-const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>((prevState) => ({
-  doc: prevState?.doc ?? 'Hello World!',
+const { getView, useViewEffect, setContainer } = create((prevState) => ({
+  state: prevState,
+  doc: 'Hello World!',
   extensions: [
     EditorView.theme({
       '&.cm-editor': {
@@ -26,9 +26,10 @@ const { getView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElem
 
 function Editor() {
   const [isReadOnly, setReadOnly] = useState(false)
-  useViewEffect((view) => {
+  const syncReadOnly = useCallback<ViewEffectSetup>((view) => {
     setReadOnly(view.state.readOnly)
-  })
+  }, [])
+  useViewEffect(syncReadOnly)
   const toggleReadOnly = () => {
     const view = getView()
     if (view) {
@@ -37,11 +38,10 @@ function Editor() {
       setReadOnly(!isReadOnly)
     }
   }
-  const containerRef = useContainerRef()
   return (
     <>
       <button onClick={toggleReadOnly}>Turn {isReadOnly ? 'off' : 'on'} read-only</button>
-      <div ref={containerRef} style={{ marginTop: '0.5rem' }} />
+      <div ref={setContainer} style={{ marginTop: '0.5rem' }} />
     </>
   )
 }

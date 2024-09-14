@@ -1,63 +1,39 @@
 import type { FunctionComponent, PropsWithChildren } from 'react'
-import { createContext, createElement, useContext } from 'react'
+import * as React from 'react'
+import { createElement, useContext, useRef } from 'react'
 
-import { createCodeMirror } from './create.js'
-import type {
-  CodeMirror,
-  GetView,
-  ProvidedCodeMirrorConfig,
-  UseContainerRefHook,
-  UseViewDispatchHook,
-  UseViewEffectHook,
-  UseViewHook,
-} from './types.js'
-import { toPascalCase } from './utils/toPascalCase.js'
-import { useSingleton } from './utils/useSingleton.js'
+import { createCodeMirror } from './core'
+import type { CodeMirror, CodeMirrorConfig } from './types'
 
 export interface CodeMirrorProps {
-  config?: ProvidedCodeMirrorConfig
+  config?: CodeMirrorConfig
 }
 
 export interface CodeMirrorProviderProps extends PropsWithChildren<CodeMirrorProps> {}
 
 export interface CodeMirrorProvider extends FunctionComponent<CodeMirrorProviderProps> {}
 
-export type UseContextHook<Container extends Element = Element> = () => CodeMirror<Container>
-
-export type UseGetViewHook = () => GetView
-
-export interface CodeMirrorWithContext<Container extends Element = Element> {
+export interface CodeMirrorContext {
   Provider: CodeMirrorProvider
-  useContext: UseContextHook<Container>
-  useGetView: UseGetViewHook
-  useView: UseViewHook
-  useViewEffect: UseViewEffectHook
-  useViewDispatch: UseViewDispatchHook
-  useContainerRef: UseContainerRefHook<Container>
+  useCodeMirror: () => CodeMirror
 }
 
-export function createCodeMirrorWithContext<Container extends Element>(
-  displayName?: string | false,
-): CodeMirrorWithContext<Container> {
-  const InternalCodeMirrorContext = createContext<CodeMirror<Container> | null>(null)
+export function createContext(): CodeMirrorContext {
+  const CodeMirrorContext = React.createContext<CodeMirror | null>(null)
 
   const CodeMirrorProvider: CodeMirrorProvider = ({ config, children }) => {
-    const instance = useSingleton(() => createCodeMirror<Container>(config))
-    return /*#__PURE__*/ createElement(
-      InternalCodeMirrorContext.Provider,
-      { value: instance },
-      children,
-    )
+    const instanceRef = useRef<CodeMirror | null>(null)
+    function getInstance() {
+      if (!instanceRef.current) {
+        instanceRef.current = createCodeMirror(config)
+      }
+      return instanceRef.current
+    }
+    return createElement(CodeMirrorContext.Provider, { value: getInstance() }, children)
   }
 
-  if (displayName) {
-    displayName = toPascalCase(displayName)
-    CodeMirrorProvider.displayName = `${displayName}.Provider`
-    InternalCodeMirrorContext.displayName = `Internal${displayName}`
-  }
-
-  const useCodeMirrorContext: UseContextHook<Container> = () => {
-    const instance = useContext(InternalCodeMirrorContext)
+  function useCodeMirrorContext() {
+    const instance = useContext(CodeMirrorContext)
     if (!instance) {
       throw new Error(
         'could not find instance from CodeMirrorContext; please ensure the component is wrapped in a <Provider>',
@@ -66,38 +42,8 @@ export function createCodeMirrorWithContext<Container extends Element>(
     return instance
   }
 
-  const useGetView: UseGetViewHook = () => {
-    const { getView: getContextView } = useCodeMirrorContext()
-    return getContextView
-  }
-
-  const useView: UseViewHook = () => {
-    const { useView: useContextView } = useCodeMirrorContext()
-    return useContextView()
-  }
-
-  const useViewEffect: UseViewEffectHook = (setup) => {
-    const { useViewEffect: useContextViewEffect } = useCodeMirrorContext()
-    return useContextViewEffect(setup)
-  }
-
-  const useViewDispatch: UseViewDispatchHook = () => {
-    const { useViewDispatch: useContextViewDispatch } = useCodeMirrorContext()
-    return useContextViewDispatch()
-  }
-
-  const useContainerRef: UseContainerRefHook<Container> = () => {
-    const { useContainerRef: useContextContainerRef } = useCodeMirrorContext()
-    return useContextContainerRef()
-  }
-
   return {
     Provider: CodeMirrorProvider,
-    useContext: useCodeMirrorContext,
-    useGetView,
-    useView,
-    useViewEffect,
-    useViewDispatch,
-    useContainerRef,
+    useCodeMirror: useCodeMirrorContext,
   }
 }

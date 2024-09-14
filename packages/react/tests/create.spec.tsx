@@ -1,185 +1,231 @@
-import { noop, setupUserEvent } from '@codemirror-toolkit/test-utils'
-import { act, render, renderHook, screen } from '@testing-library/react'
-import { PropsWithChildren, useCallback, useEffect } from 'react'
+import { noop } from '@codemirror-toolkit/test-utils'
+import { act, render } from '@testing-library/react'
+import { PropsWithChildren, useEffect, useSyncExternalStore } from 'react'
 import { describe, expect, test, vi } from 'vitest'
 
-import { createCodeMirror } from '../src/create.js'
+import { create } from '../src/create'
+import { defineViewEffect } from '../src/hooks'
 
-describe('createCodeMirror', () => {
+describe('create', () => {
   describe('without component', () => {
     test('initialize', () => {
-      const { getView, useContainerRef } = createCodeMirror()
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
-      expect(containerRef).toEqual({ current: null })
+      const { getView, subscribe, setContainer, setConfig } = create()
       expect(getView()).toBeNull()
+      expect(subscribe).toBeTypeOf('function')
+      expect(setContainer).toBeTypeOf('function')
+      expect(setConfig).toBeTypeOf('function')
     })
 
     test('create EditorView', () => {
-      const { getView, useContainerRef } = createCodeMirror()
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
-      const containerElement = document.createElement('div')
-      containerRef.current = containerElement
-      expect(containerElement).toBeEmptyDOMElement()
+      const { getView, setContainer } = create()
+      const container = document.createElement('div')
+      setContainer(container)
+      expect(container).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
       vi.runAllTimers()
-      expect(containerElement).not.toBeEmptyDOMElement()
-      expect(getView()).toBeDefined()
+      expect(container).not.toBeEmptyDOMElement()
+      expect(getView()).not.toBeNull()
+      const view = getView()
+      expect(view).not.toBeNull()
+      expect(container).toContainElement(view!.dom)
     })
 
-    test('debounce', () => {
-      const { getView, useContainerRef } = createCodeMirror()
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
-      const containerElement = document.createElement('div')
+    test('debounce setContainer calls', () => {
       vi.spyOn(window, 'queueMicrotask')
-      containerRef.current = containerElement
+      const { getView, setContainer } = create()
+      const container = document.createElement('div')
+      setContainer(container)
+      setContainer(container)
+      setContainer(null)
+      setContainer(null)
       expect(window.queueMicrotask).toHaveBeenCalledTimes(1)
-      containerRef.current = containerElement
-      expect(window.queueMicrotask).toHaveBeenCalledTimes(1)
-      expect(containerElement).toBeEmptyDOMElement()
-      expect(getView()).toBeNull()
-      containerRef.current = null
-      expect(window.queueMicrotask).toHaveBeenCalledTimes(2)
-      containerRef.current = null
-      expect(window.queueMicrotask).toHaveBeenCalledTimes(2)
-      expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
       vi.runAllTimers()
-      expect(containerElement).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
+      expect(container).toBeEmptyDOMElement()
     })
 
     test('destroy EditorView', () => {
-      const { getView, useContainerRef } = createCodeMirror()
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
-      const containerElement = document.createElement('div')
-      containerRef.current = containerElement
+      const { getView, setContainer } = create()
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+      setContainer(container)
       vi.runAllTimers()
-      expect(containerElement).not.toBeEmptyDOMElement()
-      expect(getView()).toBeDefined()
-      containerRef.current = null
+
+      const view = getView()
+      expect(view).not.toBeNull()
+      expect(view?.dom.isConnected).toBe(true)
+
+      setContainer(null)
       vi.runAllTimers()
-      expect(containerElement).toBeEmptyDOMElement()
+
+      expect(container).toBeEmptyDOMElement()
       expect(getView()).toBeNull()
+      expect(view?.dom.isConnected).toBe(false)
     })
 
-    test('config factory', () => {
-      const { getView, useContainerRef } = createCodeMirror((prevState) => ({
+    test('config factory and setConfig', () => {
+      const { getView, setContainer, setConfig } = create((prevState) => ({
         doc: prevState?.doc.slice(3) ?? 'hello',
       }))
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
-      const containerElementA = document.createElement('div')
-      containerRef.current = containerElementA
+      const container = document.createElement('div')
+      setContainer(container)
       vi.runAllTimers()
-      expect(containerElementA).not.toBeEmptyDOMElement()
       expect(getView()?.state.doc.toString()).toBe('hello')
-      const containerElementB = document.createElement('div')
-      containerRef.current = containerElementB
+
+      setConfig({ doc: 'world' })
       vi.runAllTimers()
-      expect(containerElementA).toBeEmptyDOMElement()
-      expect(containerElementB).not.toBeEmptyDOMElement()
-      expect(getView()?.state.doc.toString()).toBe('lo')
+      expect(getView()?.state.doc.toString()).toBe('world')
+
+      setConfig((prevState) => ({
+        doc: (prevState?.doc?.toString() ?? '') + '!',
+      }))
+      vi.runAllTimers()
+      expect(getView()?.state.doc.toString()).toBe('world!')
+    })
+
+    test('debounce setConfig calls', () => {
+      vi.spyOn(window, 'queueMicrotask')
+      const { getView, setContainer, setConfig } = create()
+      const container = document.createElement('div')
+      setContainer(container)
+      vi.runAllTimers()
+
+      setConfig({ doc: 'First' })
+      setConfig({ doc: 'Second' })
+      setConfig({ doc: 'Third' })
+
+      expect(window.queueMicrotask).toHaveBeenCalledTimes(2) // One for setContainer, one for setConfig
+      expect(getView()?.state.doc.toString()).toBe('')
+
+      vi.runAllTimers()
+      expect(getView()?.state.doc.toString()).toBe('Third')
+    })
+
+    test('destroy EditorView', () => {
+      const { getView, setContainer } = create()
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+      setContainer(container)
+      vi.runAllTimers()
+
+      const view = getView()
+      expect(view).not.toBeNull()
+      expect(view?.dom.isConnected).toBe(true)
+
+      setContainer(null)
+      vi.runAllTimers()
+
+      expect(container).toBeEmptyDOMElement()
+      expect(getView()).toBeNull()
+      expect(view?.dom.isConnected).toBe(false)
     })
   })
 
-  describe('with componet', () => {
+  describe('with component', () => {
     test('mount and unmount', () => {
-      const { getView, useContainerRef } = createCodeMirror<HTMLDivElement>()
+      const { getView, setContainer } = create()
       function TestComponent() {
-        const containerRef = useContainerRef()
-        return <div ref={containerRef} />
+        return <div ref={setContainer} />
       }
       const { unmount } = render(<TestComponent />)
       expect(getView()).toBeNull()
-      expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
       vi.runAllTimers()
-      expect(getView()).toBeDefined()
-      expect(screen.getByRole('textbox')).toBeInTheDocument()
+      const view = getView()
+      expect(view).not.toBeNull()
+      expect(view?.dom.isConnected).toBe(true)
       unmount()
       vi.runAllTimers()
       expect(getView()).toBeNull()
-      expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
+      expect(view?.dom.isConnected).toBe(false)
     })
 
-    test('useView hook', () => {
-      const { useView, useContainerRef } = createCodeMirror<HTMLDivElement>()
+    test('useView hook', async () => {
+      const { getView, useView, setContainer } = create()
+
       function TestComponent() {
         const view = useView()
+
         useEffect(() => {
-          view?.dispatch({
-            changes: {
-              from: 0,
-              insert: 'hello',
-            },
-          })
+          if (view) {
+            console.log('View is available')
+            view.dispatch({
+              changes: { from: 0, insert: 'Hello from useView' },
+            })
+          }
         }, [view])
-        const containerRef = useContainerRef()
-        return <div ref={containerRef} />
+
+        return <div ref={setContainer} />
       }
-      render(<TestComponent />)
-      act(() => {
-        vi.runAllTimers()
-      })
-      expect(screen.getByText('hello')).toBeInTheDocument()
+
+      vi.spyOn(console, 'log').mockImplementation(noop)
+      const { unmount } = render(<TestComponent />)
+
+      expect(console.log).not.toHaveBeenCalled()
+
+      await act(() => vi.runAllTimers())
+
+      expect(console.log).toHaveBeenCalledTimes(1)
+      expect(console.log).toHaveBeenCalledWith('View is available')
+
+      const view = getView()
+      expect(view).not.toBeNull()
+      expect(view?.state.doc.toString()).toBe('Hello from useView')
+
+      unmount()
+      vi.runAllTimers()
+      expect(getView()).toBeNull()
     })
 
     test('useViewEffect hook', () => {
-      const { useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>()
-      function TestComponent() {
-        useViewEffect((view) => {
-          console.log('effect created')
-          view.dispatch({
-            changes: {
-              from: 0,
-              insert: 'hello',
-            },
-          })
-          return () => {
-            console.log('effect destroyed')
-          }
+      const { getView, useViewEffect, setContainer } = create()
+
+      const viewEffect = defineViewEffect((view) => {
+        console.log('effect created')
+        view.dispatch({
+          changes: { from: 0, insert: 'hello' },
         })
-        const containerRef = useContainerRef()
-        return <div ref={containerRef} />
+        return () => {
+          console.log('effect destroyed')
+        }
+      })
+
+      function TestComponent() {
+        useViewEffect(viewEffect)
+        return <div ref={setContainer} />
       }
+
       vi.spyOn(console, 'log').mockImplementation(noop)
       const { rerender, unmount } = render(<TestComponent />)
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
+
       expect(console.log).toHaveBeenCalledTimes(1)
       expect(console.log).toHaveBeenCalledWith('effect created')
-      expect(screen.getByText('hello')).toBeInTheDocument()
+      expect(getView()?.state.doc.toString()).toBe('hello')
+
       rerender(<TestComponent />)
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
       expect(console.log).toHaveBeenCalledTimes(1)
+
       unmount()
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
       expect(console.log).toHaveBeenCalledTimes(2)
       expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
     })
 
-    test('useViewEffect hook with view created', () => {
-      const { useView, useViewEffect, useContainerRef } = createCodeMirror<HTMLDivElement>()
-      const { result: renderUseContainerRefResult } = renderHook(() => useContainerRef())
-      const containerRef = renderUseContainerRefResult.current
+    test('useViewEffect hook with view created', async () => {
+      const { getView, useViewEffect, subscribe, setContainer } = create()
+
       function TestParentComponent({ children }: PropsWithChildren) {
-        const view = useView()
-        const containerRef = useContainerRef()
+        const hasView = useSyncExternalStore(subscribe, () => !!getView())
         return (
           <>
-            <div ref={containerRef} />
-            {view && children}
+            <div ref={setContainer} />
+            {hasView && children}
           </>
         )
       }
+
       function TestComponent() {
         useViewEffect(() => {
           console.log('effect created')
@@ -189,65 +235,72 @@ describe('createCodeMirror', () => {
         })
         return null
       }
+
       vi.spyOn(console, 'log').mockImplementation(noop)
       const { unmount } = render(
         <TestParentComponent>
           <TestComponent />
         </TestParentComponent>,
       )
-      act(() => {
-        vi.runAllTimers()
-      })
+
+      await act(() => vi.runAllTimers())
       expect(console.log).toHaveBeenCalledTimes(1)
       expect(console.log).toHaveBeenCalledWith('effect created')
-      containerRef.current = null
-      act(() => {
-        vi.runAllTimers()
-      })
+      expect(getView()).not.toBeNull()
+
+      setContainer(null)
+      await act(() => vi.runAllTimers())
       expect(console.log).toHaveBeenCalledTimes(2)
       expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
+      expect(getView()).toBeNull()
+
       unmount()
-      act(() => {
-        vi.runAllTimers()
-      })
+      vi.runAllTimers()
       expect(console.log).toHaveBeenCalledTimes(2)
     })
 
-    test('useViewDispatch hook', async () => {
-      const { useViewDispatch, useContainerRef } = createCodeMirror<HTMLDivElement>()
+    test('useViewEffect hook with setConfig', () => {
+      const { getView, useViewEffect, setContainer, setConfig } = create()
+
+      const viewEffect = defineViewEffect((_view) => {
+        console.log('effect created')
+        return () => {
+          console.log('effect destroyed')
+        }
+      })
+
       function TestComponent() {
-        const viewDispatch = useViewDispatch()
-        const handleClick = useCallback(() => {
-          try {
-            viewDispatch({
-              changes: {
-                from: 0,
-                insert: 'hello',
-              },
-            })
-          } catch {
-            console.error('view dispatch failed')
-          }
-        }, [viewDispatch])
-        const containerRef = useContainerRef()
-        return (
-          <>
-            <div ref={containerRef} />
-            <button onClick={handleClick}>click</button>
-          </>
-        )
+        useEffect(() => {
+          setConfig({ doc: 'hello' })
+        }, [])
+        useViewEffect(viewEffect)
+        return <div ref={setContainer} />
       }
-      const userEvent = setupUserEvent()
-      vi.spyOn(console, 'error').mockImplementation(noop)
-      render(<TestComponent />)
-      await userEvent.click(screen.getByText('click'))
-      expect(console.error).toHaveBeenCalledTimes(1)
-      expect(console.error).toHaveBeenCalledWith('view dispatch failed')
-      expect(screen.queryByText('hello')).not.toBeInTheDocument()
+
+      vi.spyOn(console, 'log').mockImplementation(noop)
+      const { rerender, unmount } = render(<TestComponent />)
       vi.runAllTimers()
-      await userEvent.click(screen.getByText('click'))
-      expect(console.error).toHaveBeenCalledTimes(1)
-      expect(screen.getByText('hello')).toBeInTheDocument()
+
+      expect(console.log).toHaveBeenCalledTimes(1)
+      expect(console.log).toHaveBeenCalledWith('effect created')
+      expect(getView()?.state.doc.toString()).toBe('hello')
+
+      setConfig({ doc: 'world' })
+      vi.runAllTimers()
+
+      expect(console.log).toHaveBeenCalledTimes(3)
+      expect(console.log).toHaveBeenNthCalledWith(2, 'effect destroyed')
+      expect(console.log).toHaveBeenNthCalledWith(3, 'effect created')
+      expect(getView()?.state.doc.toString()).toBe('world')
+
+      rerender(<TestComponent />)
+      vi.runAllTimers()
+      expect(console.log).toHaveBeenCalledTimes(3)
+
+      unmount()
+      vi.runAllTimers()
+      expect(console.log).toHaveBeenCalledTimes(4)
+      expect(console.log).toHaveBeenLastCalledWith('effect destroyed')
     })
   })
 })

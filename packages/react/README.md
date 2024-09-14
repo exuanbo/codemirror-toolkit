@@ -21,97 +21,201 @@ npm install @codemirror-toolkit/react
 
 # Yarn
 yarn add @codemirror-toolkit/react
+
+# pnpm
+pnpm add @codemirror-toolkit/react
 ```
 
 Note that, you also need to install the peer dependencies `@codemirror/state` and `@codemirror/view` if you don't use the official all-in-one package [`codemirror`](https://www.npmjs.com/package/codemirror) or your package manager doesn't do it automatically.
+
+<details>
+<summary><h2>Migrate from 0.6.x</h2></summary>
+
+- `createCodeMirror` is refactored to a core function without hooks. Use `create` instead for a similar functionality with hooks.
+
+  Before:
+
+  ```typescript
+  const cm = createCodeMirror(config)
+  ```
+
+  After:
+
+  ```typescript
+  const cm = create(config)
+  ```
+
+- `create` now provides `useView` and `useViewEffect` hooks.
+
+  Before:
+
+  ```typescript
+  const { useView, useViewEffect } = createCodeMirror(config)
+  ```
+
+  After:
+
+  ```typescript
+  const { useView, useViewEffect } = create(config)
+  ```
+
+- `createCodeMirrorContext` is renamed to `createContext` and does not provide hooks directly. Use `useCodeMirror` to access the CodeMirror instance, then use the exported hooks with this instance.
+
+  Before:
+
+  ```typescript
+  const { Provider, useView, useViewEffect } = createCodeMirrorContext()
+  ```
+
+  After:
+
+  ```typescript
+  import { useView, useViewEffect } from '@codemirror-toolkit/react'
+
+  const { Provider, useCodeMirror } = createContext()
+  // Then in your component:
+  const cm = useCodeMirror()
+  useView(cm)
+  useViewEffect(cm, effectSetup)
+  ```
+
+- `useViewEffect` now requires the setup function to be memoized or have a stable reference to prevent the effect from firing on every render.
+
+  Before:
+
+  ```typescript
+  useViewEffect((view) => {
+    // Effect logic
+  })
+  ```
+
+  After:
+
+  <!-- prettier-ignore -->
+  ```typescript
+  const effectSetup = useCallback((view) => {
+    // Effect logic
+  }, [/* dependencies */])
+
+  useViewEffect(cm, effectSetup)
+  ```
+
+- The `useContainerRef` hook has been replaced with a `setContainer` function.
+
+  Before:
+
+  ```typescript
+  const { useContainerRef } = createCodeMirror(config)
+
+  function Editor() {
+    const containerRef = useContainerRef()
+    return <div ref={containerRef} />
+  }
+  ```
+
+  After:
+
+  ```typescript
+  const { setContainer } = create(config)
+
+  function Editor() {
+    return <div ref={setContainer} />
+  }
+  ```
+
+- Configuration can now be set using `setConfig`.
+
+  ```typescript
+  const { setConfig } = create()
+  setConfig(config)
+  ```
+
+</details>
 
 ## Usage
 
 First create an instance with configuration as an object or a factory function:
 
+<!-- prettier-ignore -->
 ```ts
-import { createCodeMirror } from '@codemirror-toolkit/react'
+import { create } from '@codemirror-toolkit/react'
 
-const codeMirror = createCodeMirror<HTMLDivElement>((prevState) => ({
-  doc: prevState?.doc ?? 'Hello World!',
-  // ...otherConfig,
+const cm = create((prevState) => ({
+  state: prevState, // useful for HMR
+  doc: 'Hello World!',
 }))
 
-// if you want to use them in other files
-export const { useViewEffect, useContainerRef /* ... */ } = codeMirror
+export const {
+  getView,
+  useView,
+  useViewEffect,
+  setContainer,
+  setConfig,
+} = cm
 ```
 
-Then bind your components with the hooks:
+Then bind your components with a callback ref:
 
 ```tsx
 function Editor() {
-  const containerRef = useContainerRef()
-  return <div ref={containerRef} />
-}
-
-function App() {
-  const [showEditor, setShowEditor] = useState(true)
-  const [lastInput, setLastInput] = useState('')
-  useViewEffect((view) => {
-    console.log('EditorView is created')
-    return () => {
-      console.log('EditorView is destroyed')
-      // expect(view.dom.parentElement).toBeNull()
-      setLastInput(view.state.doc.toString())
-    }
-  })
-  return (
-    <>
-      <button onClick={() => setShowEditor(!showEditor)}>
-        {showEditor ? 'Destroy' : 'Create'} Editor
-      </button>
-      {showEditor ? (
-        <Editor />
-      ) : (
-        <div>
-          <p>Editor destroyed</p>
-          <p>Last input: {lastInput}</p>
-        </div>
-      )}
-    </>
-  )
+  return <div ref={setContainer} />
 }
 ```
 
-:warning: An instance of `EditorView` will be created **only when** a DOM node is assigned to `containerRef.current`, and will be destroyed **only when** `containerRef.current` is set back to `null`.
+### Initiate with data from component
+
+#### Option 1:
+
+<!-- prettier-ignore -->
+```tsx
+import { create } from '@codemirror-toolkit/react'
+import { useCallback } from 'react'
+
+const { setContainer, setConfig } = create()
+
+interface Props {
+  initialInput: string
+}
+
+function Editor({ initialInput }: Props) {
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    setContainer(node)
+    if (node) {
+      setConfig({
+        doc: initialInput,
+      })
+    }
+  }, [initialInput])
+  return <div ref={ref} />
+}
+```
+
+#### Option 2:
+
+Use `createContext`, see below.
 
 ### With Context Provider
 
-All the functions and hooks created with `createCodeMirror` don't require a context provider to use in different components, but in some cases you may want to instantiate `EditorView` with props from a component. In this case, you can use `createCodeMirrorWithContext` to create an instance within a context:
-
 ```tsx
-import { createCodeMirrorWithContext } from '@codemirror-toolkit/react'
+import { createContext } from '@codemirror-toolkit/react'
 
-const {
-  Provider: CodeMirrorProvider,
-  useView,
-  useContainerRef,
-  // ...
-} = createCodeMirrorWithContext<HTMLDivElement>('CodeMirrorContext')
-
-function MenuBar() {
-  const view = useView()
-  // ...
-}
+const { Provider: CodeMirrorProvider, useCodeMirror } = createContext()
 
 function Editor() {
-  const containerRef = useContainerRef()
-  return <div ref={containerRef} />
+  const { setContainer } = useCodeMirror()
+  return <div ref={setContainer} />
 }
 
-function App({ initialInput }: { initialInput: string }) {
+interface Props {
+  initialInput: string
+}
+
+function EditorWrapper({ initialInput }: Props) {
   return (
     <CodeMirrorProvider
       config={{
         doc: initialInput,
-        // ...otherConfig,
       }}>
-      <MenuBar />
       <Editor />
     </CodeMirrorProvider>
   )
@@ -122,82 +226,83 @@ function App({ initialInput }: { initialInput: string }) {
 
 > 🚧 Documentation is WIP.
 
-There are only two functions exported: `createCodeMirror` and `createCodeMirrorWithContext`.
-
 ### Common Types
 
 ```ts
 import type { EditorState } from '@codemirror/state'
 import type { EditorView, EditorViewConfig } from '@codemirror/view'
-import type { EffectCallback, MutableRefObject } from 'react'
+import type { EffectCallback } from 'react'
 
-type EditorViewConfigWithoutParentElement = Omit<EditorViewConfig, 'parent'>
-interface CodeMirrorConfig extends EditorViewConfigWithoutParentElement {}
+type EditorViewConfigCreator = (prevState: EditorState | undefined) => EditorViewConfig
+type CodeMirrorConfig = EditorViewConfig | EditorViewConfigCreator
 
-type CodeMirrorConfigCreator = (prevState: EditorState | undefined) => CodeMirrorConfig
-type ProvidedCodeMirrorConfig = CodeMirrorConfig | CodeMirrorConfigCreator
+type ViewChangeHandler = (view: EditorView | null) => void
 
-type GetView = () => EditorView | null
-type UseViewHook = () => EditorView | null
+type ViewContainer = Element | DocumentFragment
+
+interface CodeMirror {
+  getView: () => EditorView | null
+  subscribe: (onViewChange: ViewChangeHandler) => () => void
+  setContainer: (container: ViewContainer | null) => void
+  setConfig: (config: CodeMirrorConfig) => void
+}
 
 type ViewEffectCleanup = ReturnType<EffectCallback>
 type ViewEffectSetup = (view: EditorView) => ViewEffectCleanup
-type UseViewEffectHook = (setup: ViewEffectSetup) => void
 
-type ViewDispath = typeof EditorView.prototype.dispatch
-type UseViewDispatchHook = () => ViewDispath
-
-type ContainerRef<ContainerElement extends Element = Element> =
-  MutableRefObject<ContainerElement | null>
-type UseContainerRefHook<ContainerElement extends Element = Element> =
-  () => ContainerRef<ContainerElement>
-
-interface CodeMirror<ContainerElement extends Element = Element> {
-  getView: GetView
-  useView: UseViewHook
-  useViewEffect: UseViewEffectHook
-  useViewDispatch: UseViewDispatchHook
-  useContainerRef: UseContainerRefHook<ContainerElement>
+interface CodeMirrorHooks {
+  useView: () => EditorView | null
+  useViewEffect: (setup: ViewEffectSetup) => void
 }
+
+type CodeMirrorWithHooks = CodeMirror & CodeMirrorHooks
 ```
 
 ### `createCodeMirror`
 
 ```ts
-function createCodeMirror<ContainerElement extends Element>(
-  config?: ProvidedCodeMirrorConfig,
-): CodeMirror<ContainerElement>
+function createCodeMirror(initialConfig?: CodeMirrorConfig): CodeMirror
 ```
 
-### `createCodeMirrorWithContext`
+### `create`
+
+```ts
+function create(config?: CodeMirrorConfig): CodeMirrorWithHooks
+```
+
+### `createContext`
 
 ```ts
 import type { FunctionComponent, PropsWithChildren } from 'react'
 
 interface CodeMirrorProps {
-  config?: ProvidedCodeMirrorConfig
+  config?: CodeMirrorConfig
 }
+
 interface CodeMirrorProviderProps extends PropsWithChildren<CodeMirrorProps> {}
+
 interface CodeMirrorProvider extends FunctionComponent<CodeMirrorProviderProps> {}
 
-type UseCodeMirrorContextHook<ContainerElement extends Element = Element> =
-  () => CodeMirror<ContainerElement>
-
-type UseGetViewHook = () => GetView
-
-interface CodeMirrorWithContext<ContainerElement extends Element = Element> {
+interface CodeMirrorContext {
   Provider: CodeMirrorProvider
-  useContext: UseCodeMirrorContextHook<ContainerElement>
-  useGetView: UseGetViewHook
-  useView: UseViewHook
-  useViewEffect: UseViewEffectHook
-  useViewDispatch: UseViewDispatchHook
-  useContainerRef: UseContainerRefHook<ContainerElement>
+  useCodeMirror: () => CodeMirror
 }
 
-function createCodeMirrorWithContext<ContainerElement extends Element>(
-  displayName?: string | false,
-): CodeMirrorWithContext<ContainerElement>
+function createContext(): CodeMirrorContext
+```
+
+### `useView`
+
+```ts
+function useView(cm: CodeMirror): EditorView | null
+```
+
+### `useViewEffect`
+
+```ts
+function defineViewEffect(setup: ViewEffectSetup): ViewEffectSetup
+
+function useViewEffect(cm: CodeMirror, setup: ViewEffectSetup): void
 ```
 
 ## License
