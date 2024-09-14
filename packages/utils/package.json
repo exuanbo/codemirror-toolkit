@@ -45,6 +45,6 @@
     "@codemirror/state": "^6.0.0"
   },
   "devDependencies": {
-    "@codemirror/state": "^6.3.3"
+    "@codemirror/state": "^6.4.1"
   }
 }
