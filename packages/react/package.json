@@ -47,10 +47,10 @@
   "peerDependencies": {
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@types/react": ">=16.7.0",
+    "@types/react-dom": ">=16.7.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "peerDependenciesMeta": {
     "@types/react": {
