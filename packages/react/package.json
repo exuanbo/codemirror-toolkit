@@ -31,12 +31,12 @@
   },
   "keywords": [
     "codemirror",
+    "codemirror6",
     "toolkit",
     "codemirror-toolkit",
     "codemirror-toolkit-react",
     "react",
-    "react-codemirror",
-    "codemirror-react"
+    "react-codemirror"
   ],
   "author": "exuanbo <exuanbo@protonmail.com>",
   "license": "MIT",
