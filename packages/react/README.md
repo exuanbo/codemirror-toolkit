@@ -28,83 +28,35 @@ pnpm add @codemirror-toolkit/react
 
 Note that, you also need to install the peer dependencies `@codemirror/state` and `@codemirror/view` if you don't use the official all-in-one package [`codemirror`](https://www.npmjs.com/package/codemirror) or your package manager doesn't do it automatically.
 
+## Migrate from 0.6.0
+
 <details>
-<summary><h2>Migrate from 0.6.x</h2></summary>
+<summary>Migration Guide</summary>
 
 - `createCodeMirror` is refactored to a core function without hooks. Use `create` instead for a similar functionality with hooks.
 
-  Before:
-
-  ```typescript
-  const cm = createCodeMirror(config)
-  ```
-
-  After:
-
-  ```typescript
-  const cm = create(config)
-  ```
-
-- `create` now provides `useView` and `useViewEffect` hooks.
-
-  Before:
-
-  ```typescript
+  ```ts
+  // v0.6.0
   const { useView, useViewEffect } = createCodeMirror(config)
   ```
 
-  After:
-
-  ```typescript
+  ```ts
+  // v0.7.0
   const { useView, useViewEffect } = create(config)
   ```
 
-- `createCodeMirrorContext` is renamed to `createContext` and does not provide hooks directly. Use `useCodeMirror` to access the CodeMirror instance, then use the exported hooks with this instance.
+- Configuration can now be set using `setConfig`.
 
-  Before:
-
-  ```typescript
-  const { Provider, useView, useViewEffect } = createCodeMirrorContext()
-  ```
-
-  After:
-
-  ```typescript
-  import { useView, useViewEffect } from '@codemirror-toolkit/react'
-
-  const { Provider, useCodeMirror } = createContext()
-  // Then in your component:
-  const cm = useCodeMirror()
-  useView(cm)
-  useViewEffect(cm, effectSetup)
-  ```
-
-- `useViewEffect` now requires the setup function to be memoized or have a stable reference to prevent the effect from firing on every render.
-
-  Before:
-
-  ```typescript
-  useViewEffect((view) => {
-    // Effect logic
-  })
-  ```
-
-  After:
-
-  <!-- prettier-ignore -->
-  ```typescript
-  const effectSetup = useCallback((view) => {
-    // Effect logic
-  }, [/* dependencies */])
-
-  useViewEffect(cm, effectSetup)
+  ```ts
+  // v0.7.0
+  const { setConfig } = create()
+  setConfig(config)
   ```
 
 - The `useContainerRef` hook has been replaced with a `setContainer` function.
 
-  Before:
-
-  ```typescript
+  ```ts
+  // v0.6.0
   const { useContainerRef } = createCodeMirror(config)
 
   function Editor() {
@@ -113,9 +65,8 @@ Note that, you also need to install the peer dependencies `@codemirror/state` an
   }
   ```
 
-  After:
-
-  ```typescript
+  ```ts
+  // v0.7.0
   const { setContainer } = create(config)
 
   function Editor() {
@@ -123,11 +74,56 @@ Note that, you also need to install the peer dependencies `@codemirror/state` an
   }
   ```
 
-- Configuration can now be set using `setConfig`.
+- `useViewEffect` now requires the setup function to be memoized or have a stable reference to prevent the effect from firing on every render.
 
-  ```typescript
-  const { setConfig } = create()
-  setConfig(config)
+  ```ts
+  // v0.6.0
+  useViewEffect((view) => {
+    // Effect logic
+  })
+  ```
+
+  <!-- prettier-ignore -->
+  ```ts
+  // v0.7.0
+  const effect = useCallback((view) => {
+    // Effect logic
+  }, [/* dependencies */])
+
+  useViewEffect(cm, effect)
+  ```
+
+- `createCodeMirrorContext` is renamed to `createContext` and does not provide hooks directly. Use `useCodeMirror` to access the CodeMirror instance, then use the exported hooks with this instance.
+
+  ```ts
+  // v0.6.0
+  const { Provider, useView, useViewEffect, useContainerRef } = createCodeMirrorContext()
+
+  function Editor() {
+    const _view = useView()
+    useViewEffect((view) => {
+      // Effect logic
+    })
+
+    const containerRef = useContainerRef()
+    return <div ref={containerRef} />
+  }
+  ```
+
+  ```ts
+  // v0.7.0
+  const { Provider, useCodeMirror } = createContext()
+
+  import { useView, useViewEffect } from '@codemirror-toolkit/react'
+
+  function Editor() {
+    const cm = useCodeMirror()
+
+    const _view = useView(cm)
+    useViewEffect(cm, effect)
+
+    return <div ref={cm.setContainer} />
+  }
   ```
 
 </details>
@@ -259,19 +255,19 @@ interface CodeMirrorHooks {
 type CodeMirrorWithHooks = CodeMirror & CodeMirrorHooks
 ```
 
-### `createCodeMirror`
+### createCodeMirror
 
 ```ts
 function createCodeMirror(initialConfig?: CodeMirrorConfig): CodeMirror
 ```
 
-### `create`
+### create
 
 ```ts
 function create(config?: CodeMirrorConfig): CodeMirrorWithHooks
 ```
 
-### `createContext`
+### createContext
 
 ```ts
 import type { FunctionComponent, PropsWithChildren } from 'react'
@@ -292,13 +288,13 @@ interface CodeMirrorContext {
 function createContext(): CodeMirrorContext
 ```
 
-### `useView`
+### useView
 
 ```ts
 function useView(cm: CodeMirror): EditorView | null
 ```
 
-### `useViewEffect`
+### useViewEffect
 
 ```ts
 function defineViewEffect(setup: ViewEffectSetup): ViewEffectSetup
